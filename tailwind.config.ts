@@ -7,7 +7,18 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      abeezee: ["AbeeZee", "sans-serif"]
+    },
     extend: {
+      colors : {
+        primary_dark: "#372549",
+        primary_light: "#372549",
+        secondary_dark: "#774C60",
+        secondary_light: "#B75D69",
+        altimate: "#EACDC2"
+
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
