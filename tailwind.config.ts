@@ -8,7 +8,8 @@ const config: Config = {
   ],
   theme: {
     fontFamily: {
-      abeezee: ["AbeeZee", "sans-serif"]
+      abeezee: ["AbeeZee", "sans-serif"],
+      abel: ["Abel", "sans-serif"]
     },
     extend: {
       colors : {
