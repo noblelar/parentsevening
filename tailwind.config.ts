@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     fontFamily: {
       abeezee: ["AbeeZee", "sans-serif"],
-      abel: ["Abel", "sans-serif"]
+      abel: ["Abel", "sans-serif"],
+      opensans: ["Open Sans", "sans-serif"]
     },
     extend: {
       colors : {
@@ -24,6 +25,9 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      transitionProperty: {
+        'width': 'width',
       },
     },
   },

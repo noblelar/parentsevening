@@ -1,65 +1,181 @@
-import React, { useState } from 'react';
-import { FaTachometerAlt, FaHamburger, FaBookOpen, FaStar, FaCog, FaMoneyCheckAlt, FaUserCircle, FaQuestionCircle, FaSearch, FaBars } from 'react-icons/fa';
+import React, { useEffect, useState } from "react";
+import {
+  FaTachometerAlt,
+  FaHamburger,
+  FaBookOpen,
+  FaStar,
+  FaCog,
+  FaMoneyCheckAlt,
+  FaUserCircle,
+  FaQuestionCircle,
+  FaSearch,
+  FaBars,
+} from "react-icons/fa";
+import { TbLayoutSidebarRightCollapse } from "react-icons/tb";
+import { MdOutlineMenuOpen } from "react-icons/md";
+import { GiTeacher } from "react-icons/gi";
+import { PiStudent } from "react-icons/pi";
+import { IoCalendarOutline } from "react-icons/io5";
 // import './styles/sidebar.css';
 // import "../../../styles/sidebar.css";
 
+const Sidebar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [iconSize, setIconSize] = useState(25);
 
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
 
-const Sidebar: React.FC = () => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+  useEffect(() => {
+    isCollapsed ? setIconSize(35) : setIconSize(22);
+    console.log(iconSize);
+  }, [isCollapsed]);
 
-    const toggleSidebar = () => {
-        setIsCollapsed(!isCollapsed);
-    };
-
-    return (
-        <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
-            <div className="sidebar-header">
-                <FaBars onClick={toggleSidebar} className="toggle-icon" />
-                {!isCollapsed && <span className="sidebar-logo">GoodFood</span>}
-            </div>
-            {!isCollapsed && (
-                <div className="sidebar-search">
-                    <FaSearch className="search-icon" />
-                    <input type="text" placeholder="Search" />
-                </div>
-            )}
-            <div className="sidebar-menu">
-                <div className="sidebar-item">
-                    <FaTachometerAlt className="sidebar-icon" />
-                    {!isCollapsed && <span>Dashboard</span>}
-                </div>
-                <div className="sidebar-item">
-                    <FaHamburger className="sidebar-icon" />
-                    {!isCollapsed && <span>Food Order</span>}
-                </div>
-                <div className="sidebar-item">
-                    <FaBookOpen className="sidebar-icon" />
-                    {!isCollapsed && <span>Manage Menu</span>}
-                </div>
-                <div className="sidebar-item">
-                    <FaStar className="sidebar-icon" />
-                    {!isCollapsed && <span>Customer Review</span>}
-                </div>
-                <div className="sidebar-item">
-                    <FaCog className="sidebar-icon" />
-                    {!isCollapsed && <span>Settings</span>}
-                </div>
-                <div className="sidebar-item">
-                    <FaMoneyCheckAlt className="sidebar-icon" />
-                    {!isCollapsed && <span>Payment</span>}
-                </div>
-                <div className="sidebar-item">
-                    <FaUserCircle className="sidebar-icon" />
-                    {!isCollapsed && <span>Accounts</span>}
-                </div>
-                <div className="sidebar-item">
-                    <FaQuestionCircle className="sidebar-icon" />
-                    {!isCollapsed && <span>Help</span>}
-                </div>
-            </div>
+  return (
+    <div
+      className={`w-[250px] bg-[#f8f9fa] h-[100vh] transition-[width] absolute -z-10 top-0 duration-300 flex flex-col justify-between ${
+        isCollapsed ? "w-[80px]" : ""
+      }`}
+    >
+      <div>
+        <div className=" h-[5.5rem] "></div>
+        <div className="flex items-center mb-4 " onClick={toggleSidebar}>
+          {/* <FaBars onClick={toggleSidebar}  */}
+          {!isCollapsed ? (
+            <MdOutlineMenuOpen className=" toggle-icon " />
+          ) : (
+            <TbLayoutSidebarRightCollapse className="toggle-icon" />
+          )}
+          {/* className="toggle-icon" /> */}
+          {!isCollapsed && (
+            <span className="sidebar-logo hidden "> SideBar </span>
+          )}
         </div>
-    );
-}
+
+        <div className=" mt-4 ">
+          <div
+            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+              !isCollapsed ? "pl-3 " : ""
+            } `}
+          >
+            <FaTachometerAlt
+              size={iconSize}
+              color={"#372549"}
+              className={` ${isCollapsed ? "m-auto" : ""} `}
+            />
+            {!isCollapsed && (
+              <span className=" font-opensans font-semibold ">Dashboard</span>
+            )}
+          </div>
+          <div
+            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+              !isCollapsed ? "pl-3 " : ""
+            } `}
+          >
+            <IoCalendarOutline
+              size={iconSize}
+              color={"#372549"}
+              className={` ${isCollapsed ? "m-auto" : ""} `}
+            />
+            {!isCollapsed && (
+              <span className=" font-opensans font-semibold ">
+                Appointments
+              </span>
+            )}
+          </div>
+          <div
+            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+              !isCollapsed ? "pl-3 " : ""
+            } `}
+          >
+            <GiTeacher
+              size={iconSize}
+              color={"#372549"}
+              className={` ${isCollapsed ? "m-auto" : ""} `}
+            />
+            {!isCollapsed && (
+              <span className=" font-opensans font-semibold ">Teachers</span>
+            )}
+          </div>
+
+          <div
+            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+              !isCollapsed ? "pl-3 " : ""
+            } `}
+          >
+            <PiStudent
+              size={iconSize}
+              color={"#372549"}
+              className={` ${isCollapsed ? "m-auto" : ""} `}
+            />
+            {!isCollapsed && (
+              <span className=" font-opensans font-semibold ">Student</span>
+            )}
+          </div>
+
+          <div
+            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+              !isCollapsed ? "pl-3 " : ""
+            } `}
+          >
+            <FaStar
+              size={iconSize}
+              color={"#372549"}
+              className={` ${isCollapsed ? "m-auto" : ""} `}
+            />
+            {!isCollapsed && (
+              <span className=" font-opensans font-semibold ">Parents</span>
+            )}
+          </div>
+
+          <div
+            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+              !isCollapsed ? "pl-3 " : ""
+            } `}
+          >
+            <FaCog
+              size={iconSize}
+              color={"#372549"}
+              className={` ${isCollapsed ? "m-auto" : ""} `}
+            />
+            {!isCollapsed && (
+              <span className=" font-opensans font-semibold ">Settings</span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="py-5">
+        <div
+          className={`flex items-center space-x-3 py-2 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+            !isCollapsed ? "pl-3 " : ""
+          } `}
+        >
+          <FaUserCircle
+            color={"#372549"}
+            className={` ${isCollapsed ? "m-auto" : ""} `}
+          />
+          {!isCollapsed && (
+            <span className=" font-abel font-semibold ">Accounts</span>
+          )}
+        </div>
+        <div
+          className={`flex items-center space-x-3 py-2 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+            !isCollapsed ? "pl-3 " : ""
+          } `}
+        >
+          <FaQuestionCircle
+            color={"#372549"}
+            className={` ${isCollapsed ? "m-auto" : ""} `}
+          />
+          {!isCollapsed && (
+            <span className=" font-abel font-semibold ">Help</span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Sidebar;

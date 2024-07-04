@@ -4,7 +4,7 @@ import { FaSearch, FaBell, FaUserCircle } from "react-icons/fa";
 
 const Header: React.FC = () => {
   return (
-    <div className="header flex justify-between align-middle items-center py-[10px] px-[20px] bg-white  border-b-2 border-primary_light border-solid text-primary_dark ">
+    <div className="header flex justify-between align-middle items-center py-[10px] px-[20px] bg-white/40  border-b-2 border-primary_light border-solid text-primary_dark ">
       <div className="flex items-center ">
         <div className="text-[2.2rem] font-extrabold mr-[20px] text-primary_dark ">
           <span className=" font-abel ">Gen</span>
@@ -35,3 +35,4 @@ const Header: React.FC = () => {
 };
 
 export default Header;
+
