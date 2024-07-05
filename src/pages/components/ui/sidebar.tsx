@@ -16,6 +16,7 @@ import { MdOutlineMenuOpen } from "react-icons/md";
 import { GiTeacher } from "react-icons/gi";
 import { PiStudent } from "react-icons/pi";
 import { IoCalendarOutline } from "react-icons/io5";
+import Link from "next/link";
 // import './styles/sidebar.css';
 // import "../../../styles/sidebar.css";
 
@@ -34,12 +35,12 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`w-[250px] bg-[#f8f9fa] h-[100vh] transition-[width] absolute -z-10 top-0 duration-300 flex flex-col justify-between ${
+      className={`w-[250px] bg-[#f8f9fa] h-[calc(100vh-77.797px)] transition-[width]  top-0 duration-300 flex flex-col justify-between ${
         isCollapsed ? "w-[80px]" : ""
       }`}
     >
       <div>
-        <div className=" h-[5.5rem] "></div>
+        {/* <div className=" h-[5.5rem] "></div> */}
         <div className="flex items-center mb-4 " onClick={toggleSidebar}>
           {/* <FaBars onClick={toggleSidebar}  */}
           {!isCollapsed ? (
@@ -54,20 +55,22 @@ const Sidebar = () => {
         </div>
 
         <div className=" mt-4 ">
+          <Link href={"/dashboard"}>
           <div
             className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
               !isCollapsed ? "pl-3 " : ""
             } `}
           >
-            <FaTachometerAlt
-              size={iconSize}
-              color={"#372549"}
-              className={` ${isCollapsed ? "m-auto" : ""} `}
-            />
-            {!isCollapsed && (
-              <span className=" font-opensans font-semibold ">Dashboard</span>
-            )}
+              <FaTachometerAlt
+                size={iconSize}
+                color={"#372549"}
+                className={` ${isCollapsed ? "m-auto" : ""} `}
+              />
+              {!isCollapsed && (
+                <span className=" font-opensans font-semibold ">Dashboard</span>
+              )}
           </div>
+            </Link>
           <div
             className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
               !isCollapsed ? "pl-3 " : ""

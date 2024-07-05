@@ -7,8 +7,12 @@ const Layout = ({ children }: { children: ReactElement }) => {
   return (
     <>
       <Header />
-      <Sidebar/>
-      <main>{children}</main>
+      <main>
+        <div className=" flex justify-between">
+          <Sidebar />
+          {children}
+        </div>
+      </main>
       <Footer />
     </>
   );
