@@ -7,9 +7,9 @@ import Orders from "./dbitems/orders";
 
 const Dashboard = () => {
   return (
-    <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll ">
+    <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8 ">
       This is our new text area
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Revenue />
         <OrderTime />
       </div>
