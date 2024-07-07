@@ -5,7 +5,8 @@ import Rating from "./dbitems/rating";
 import MostOrderedFood from "./dbitems/mostorderedFood";
 import Orders from "./dbitems/orders";
 import Link from "next/link";
-import Button from "../components/ui/button";
+import Button from "@/components/ui/button";
+// import Button from "../components/ui/button";
 
 const Dashboard = () => {
   return (
