@@ -17,6 +17,7 @@ import { GiTeacher } from "react-icons/gi";
 import { PiStudent } from "react-icons/pi";
 import { IoCalendarOutline } from "react-icons/io5";
 import Link from "next/link";
+import Image from "next/image";
 // import './styles/sidebar.css';
 // import "../../../styles/sidebar.css";
 
@@ -56,11 +57,11 @@ const Sidebar = () => {
 
         <div className=" mt-4 ">
           <Link href={"/dashboard"}>
-          <div
-            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
-              !isCollapsed ? "pl-3 " : ""
-            } `}
-          >
+            <div
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                !isCollapsed ? "pl-3 " : ""
+              } `}
+            >
               <FaTachometerAlt
                 size={iconSize}
                 color={"#372549"}
@@ -69,8 +70,8 @@ const Sidebar = () => {
               {!isCollapsed && (
                 <span className=" font-opensans font-semibold ">Dashboard</span>
               )}
-          </div>
-            </Link>
+            </div>
+          </Link>
           <div
             className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
               !isCollapsed ? "pl-3 " : ""
@@ -131,7 +132,27 @@ const Sidebar = () => {
               <span className=" font-opensans font-semibold ">Parents</span>
             )}
           </div>
-
+          <div
+            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+              !isCollapsed ? "pl-3 " : ""
+            } `}
+          >
+            {/* <FaStar
+              size={iconSize}
+              color={"#372549"}
+              className={` ${isCollapsed ? "m-auto" : ""} `}
+            /> */}
+            <Image
+              src="/images/meeting.svg"
+              width={iconSize}
+              height={iconSize}
+              alt="Eve icon"
+              className={` ${isCollapsed ? "m-auto" : ""} `}
+            />
+            {!isCollapsed && (
+              <span className=" font-opensans font-semibold ">Evening</span>
+            )}
+          </div>
           <div
             className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
               !isCollapsed ? "pl-3 " : ""
