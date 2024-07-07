@@ -1,50 +1,119 @@
+import React, { useState } from "react";
+import { Evening } from "@/utils/data_interface";
+import { evenings } from "@/utils/datasamples";
+import { FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 
-
-import React, { useState } from 'react'
-import { Evening } from '@/utils/data_interface'
-import { evenings } from '@/utils/datasamples'
+type SortConfig = {
+    key: keyof Evening;
+    direction: 'ascending' | 'descending';
+};
 
 const Evenings = () => {
-   const [selectedEvening, setSelectedEvening] = useState<number | null>(null);
+    const [selectedEvening, setSelectedEvening] = useState<number | null>(null);
+    const [filters, setFilters] = useState({
+        search: ''
+    });
+    const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFilters({ ...filters, search: e.target.value });
+    };
+
+    const handleSort = (key: keyof Evening) => {
+        let direction: 'ascending' | 'descending' = 'ascending';
+        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const sortedEvenings = React.useMemo(() => {
+        let sortableEvenings = [...evenings];
+        if (sortConfig !== null) {
+            sortableEvenings.sort((a, b) => {
+                if (a[sortConfig.key] < b[sortConfig.key]) {
+                    return sortConfig.direction === 'ascending' ? -1 : 1;
+                }
+                if (a[sortConfig.key] > b[sortConfig.key]) {
+                    return sortConfig.direction === 'ascending' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        return sortableEvenings;
+    }, [evenings, sortConfig]);
+
+    const filteredEvenings = sortedEvenings.filter(evening => {
+        return (
+            filters.search === '' ||
+            Object.values(evening).some(value =>
+                value.toString().toLowerCase().includes(filters.search.toLowerCase())
+            )
+        );
+    });
 
   return (
-   <div className="overflow-x-auto">
-   <table className="min-w-full bg-white border border-gray-200">
-       <thead>
-           <tr>
-               <th className="px-4 py-2 border-b">ID</th>
-               <th className="px-4 py-2 border-b">Year Group</th>
-               <th className="px-4 py-2 border-b">Date</th>
-               <th className="px-4 py-2 border-b">Term</th>
-               <th className="px-4 py-2 border-b">Scheduled For</th>
-               <th className="px-4 py-2 border-b">Start Time</th>
-               <th className="px-4 py-2 border-b">End Time</th>
-               <th className="px-4 py-2 border-b">Planned By</th>
-           </tr>
-       </thead>
-       <tbody>
-           {evenings.map((evening) => (
-               <tr
-                   key={evening.id}
-                   className={`${
-                       selectedEvening === evening.id ? 'bg-blue-100' : ''
-                   } hover:bg-gray-100 cursor-pointer`}
-                   onClick={() => setSelectedEvening(evening.id)}
-               >
-                   <td className="px-4 py-2 border-b">{evening.id}</td>
-                   <td className="px-4 py-2 border-b">{evening.yearGroup}</td>
-                   <td className="px-4 py-2 border-b">{evening.date}</td>
-                   <td className="px-4 py-2 border-b">{evening.term}</td>
-                   <td className="px-4 py-2 border-b">{evening.scheduledFor}</td>
-                   <td className="px-4 py-2 border-b">{evening.startTime}</td>
-                   <td className="px-4 py-2 border-b">{evening.endTime}</td>
-                   <td className="px-4 py-2 border-b">{evening.plannedBy}</td>
-               </tr>
-           ))}
-       </tbody>
-   </table>
+    <div className="p-4">
+    <div className="mb-4">
+        <input
+            type="text"
+            name="search"
+            placeholder="Search"
+            value={filters.search}
+            onChange={handleSearchChange}
+            className="w-full p-2 border rounded"
+        />
+    </div>
+    <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200">
+            <thead>
+                <tr>
+                    {[ 'yearGroup', 'date', 'term', 'scheduledFor', 'startTime', 'endTime', 'plannedBy'].map((key) => (
+                        <th
+                            key={key}
+                            className="px-4 py-2 border-b cursor-pointer"
+                            onClick={() => handleSort(key as keyof Evening)}
+                        >
+                            <div className="flex items-center justify-between">
+                                {key.charAt(0).toUpperCase() + key.slice(1)}
+                                {sortConfig && sortConfig.key === key ? (
+                                    sortConfig.direction === 'ascending' ? (
+                                        <FaSortUp />
+                                    ) : (
+                                        <FaSortDown />
+                                    )
+                                ) : (
+                                    <FaSort />
+                                )}
+                            </div>
+                        </th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody>
+                {filteredEvenings.map((evening) => (
+                    <tr
+                        key={evening.id}
+                        className={`${
+                            selectedEvening === evening.id ? 'bg-blue-100' : ''
+                        } hover:bg-gray-100 cursor-pointer`}
+                        onClick={() => setSelectedEvening(evening.id)}
+                    >
+                        {/* <td className="px-4 py-2 border-b">{evening.id}</td> */}
+                        <td className="px-4 py-2 border-b">{evening.yearGroup}</td>
+                        <td className="px-4 py-2 border-b">{evening.date}</td>
+                        <td className="px-4 py-2 border-b">{evening.term}</td>
+                        <td className="px-4 py-2 border-b">{evening.scheduledFor}</td>
+                        <td className="px-4 py-2 border-b">{evening.startTime}</td>
+                        <td className="px-4 py-2 border-b">{evening.endTime}</td>
+                        <td className="px-4 py-2 border-b">{evening.plannedBy}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
 </div>
-  )
-}
+  );
+};
 
-export default Evenings
+export default Evenings;

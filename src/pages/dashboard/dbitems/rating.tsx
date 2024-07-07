@@ -60,7 +60,7 @@ const data = [
 const Rating = () => {
   return (
     <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-lg font-semibold">Your Rating</h2>
+      <h2 className="text-lg font-semibold">Feedback and Rating</h2>
       <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur</p>
       <div className="my-4 h-80 ">
         {/* Placeholder for ratings chart */}
