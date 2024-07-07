@@ -10,3 +10,9 @@ export interface Evening {
    endTime: string;
    plannedBy: string;
 }
+
+export interface ButtonProps {
+   pathname: string;
+   onClick: () => void;
+   text: string;
+ }

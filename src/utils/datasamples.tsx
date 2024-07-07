@@ -1,4 +1,4 @@
-import { Evening } from "./data_interface";
+import { ButtonProps, Evening } from "./data_interface";
 
 let eveningIdCounter = 0;
 
@@ -77,3 +77,28 @@ export const evenings: Evening[] = [
   evening4,
   evening5,
 ];
+
+
+
+
+
+
+// ! Embeded List. Must not be touched 
+
+export const dashboardNavList: ButtonProps[] = [
+  {
+    pathname: "/dashboard",
+    onClick: ()=>{},
+    text: "Start Evening",
+  },
+  {
+    pathname: "/appointments",
+    onClick: ()=>{},
+    text: "Start Evening",
+  },
+  {
+    pathname: "/appointments",
+    onClick: ()=>{},
+    text: "Start Evening",
+  },
+]

@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
   FaTachometerAlt,
-  FaHamburger,
-  FaBookOpen,
   FaStar,
   FaCog,
-  FaMoneyCheckAlt,
   FaUserCircle,
   FaQuestionCircle,
-  FaSearch,
-  FaBars,
 } from "react-icons/fa";
 import { TbLayoutSidebarRightCollapse } from "react-icons/tb";
 import { MdOutlineMenuOpen } from "react-icons/md";
@@ -18,12 +13,17 @@ import { PiStudent } from "react-icons/pi";
 import { IoCalendarOutline } from "react-icons/io5";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 // import './styles/sidebar.css';
 // import "../../../styles/sidebar.css";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [iconSize, setIconSize] = useState(25);
+
+  const route = useRouter()
+  console.log(route)
+  const currentRoute = route.asPath
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -58,7 +58,7 @@ const Sidebar = () => {
         <div className=" mt-4 ">
           <Link href={"/dashboard"}>
             <div
-              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] ${currentRoute == '/dashboard' ? 'bg-[#e0e0e0]': '' } rounded-lg text-primary_dark ${
                 !isCollapsed ? "pl-3 " : ""
               } `}
             >
@@ -72,22 +72,25 @@ const Sidebar = () => {
               )}
             </div>
           </Link>
-          <div
-            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
-              !isCollapsed ? "pl-3 " : ""
-            } `}
-          >
-            <IoCalendarOutline
-              size={iconSize}
-              color={"#372549"}
-              className={` ${isCollapsed ? "m-auto" : ""} `}
-            />
-            {!isCollapsed && (
-              <span className=" font-opensans font-semibold ">
-                Appointments
-              </span>
-            )}
-          </div>
+          <Link href={"/appointments"}>
+            <div
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                !isCollapsed ? "pl-3 " : ""
+              } `}
+            >
+              <IoCalendarOutline
+                size={iconSize}
+                color={"#372549"}
+                className={` ${isCollapsed ? "m-auto" : ""} `}
+              />
+              {!isCollapsed && (
+                <span className=" font-opensans font-semibold ">
+                  Appointments
+                </span>
+              )}
+            </div>
+          </Link>
+
           <div
             className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
               !isCollapsed ? "pl-3 " : ""
