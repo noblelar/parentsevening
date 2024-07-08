@@ -117,6 +117,11 @@ export const dashboardNavList: ButtonProps[] = [
     text: "Manage",
   },
   {
+    pathname: "/settings",
+    onClick: ()=>{},
+    text: "Save Settings",
+  },
+  {
     pathname: "/accounts",
     onClick: ()=>{},
     text: "Manage Accounts",
