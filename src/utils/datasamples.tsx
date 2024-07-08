@@ -94,11 +94,36 @@ export const dashboardNavList: ButtonProps[] = [
   {
     pathname: "/appointments",
     onClick: ()=>{},
-    text: "Start Evening",
+    text: "Something",
   },
   {
-    pathname: "/appointments",
+    pathname: "/teachers",
     onClick: ()=>{},
-    text: "Start Evening",
+    text: "Add Teacher",
+  },
+  {
+    pathname: "/students",
+    onClick: ()=>{},
+    text: "Add Student",
+  },
+  {
+    pathname: "/parents",
+    onClick: ()=>{},
+    text: "Remind Parent",
+  },
+  {
+    pathname: "/evenings",
+    onClick: ()=>{},
+    text: "Manage",
+  },
+  {
+    pathname: "/accounts",
+    onClick: ()=>{},
+    text: "Manage Accounts",
+  },
+  {
+    pathname: "/help",
+    onClick: ()=>{},
+    text: "Get help",
   },
 ]

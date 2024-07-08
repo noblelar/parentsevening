@@ -74,7 +74,7 @@ const Sidebar = () => {
           </Link>
           <Link href={"/appointments"}>
             <div
-              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${currentRoute == '/appointments' ? 'bg-[#e0e0e0]': '' } ${
                 !isCollapsed ? "pl-3 " : ""
               } `}
             >
@@ -90,9 +90,9 @@ const Sidebar = () => {
               )}
             </div>
           </Link>
-
+          <Link href={"/teachers"}>
           <div
-            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${currentRoute == '/teachers' ? 'bg-[#e0e0e0]': '' } ${
               !isCollapsed ? "pl-3 " : ""
             } `}
           >
@@ -105,6 +105,7 @@ const Sidebar = () => {
               <span className=" font-opensans font-semibold ">Teachers</span>
             )}
           </div>
+          </Link>
 
           <div
             className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
