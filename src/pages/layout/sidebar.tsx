@@ -21,9 +21,9 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [iconSize, setIconSize] = useState(25);
 
-  const route = useRouter()
-  console.log(route)
-  const currentRoute = route.asPath
+  const route = useRouter();
+  console.log(route);
+  const currentRoute = route.asPath;
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -58,9 +58,9 @@ const Sidebar = () => {
         <div className=" mt-4 ">
           <Link href={"/dashboard"}>
             <div
-              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] ${currentRoute == '/dashboard' ? 'bg-[#e0e0e0]': '' } rounded-lg text-primary_dark ${
-                !isCollapsed ? "pl-3 " : ""
-              } `}
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] ${
+                currentRoute == "/dashboard" ? "bg-[#e0e0e0]" : ""
+              } rounded-lg text-primary_dark ${!isCollapsed ? "pl-3 " : ""} `}
             >
               <FaTachometerAlt
                 size={iconSize}
@@ -74,9 +74,9 @@ const Sidebar = () => {
           </Link>
           <Link href={"/appointments"}>
             <div
-              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${currentRoute == '/appointments' ? 'bg-[#e0e0e0]': '' } ${
-                !isCollapsed ? "pl-3 " : ""
-              } `}
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                currentRoute == "/appointments" ? "bg-[#e0e0e0]" : ""
+              } ${!isCollapsed ? "pl-3 " : ""} `}
             >
               <IoCalendarOutline
                 size={iconSize}
@@ -91,86 +91,87 @@ const Sidebar = () => {
             </div>
           </Link>
           <Link href={"/teachers"}>
-          <div
-            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${currentRoute == '/teachers' ? 'bg-[#e0e0e0]': '' } ${
-              !isCollapsed ? "pl-3 " : ""
-            } `}
-          >
-            <GiTeacher
-              size={iconSize}
-              color={"#372549"}
-              className={` ${isCollapsed ? "m-auto" : ""} `}
-            />
-            {!isCollapsed && (
-              <span className=" font-opensans font-semibold ">Teachers</span>
-            )}
-          </div>
+            <div
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                currentRoute == "/teachers" ? "bg-[#e0e0e0]" : ""
+              } ${!isCollapsed ? "pl-3 " : ""} `}
+            >
+              <GiTeacher
+                size={iconSize}
+                color={"#372549"}
+                className={` ${isCollapsed ? "m-auto" : ""} `}
+              />
+              {!isCollapsed && (
+                <span className=" font-opensans font-semibold ">Teachers</span>
+              )}
+            </div>
           </Link>
-
-          <div
-            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
-              !isCollapsed ? "pl-3 " : ""
-            } `}
-          >
-            <PiStudent
-              size={iconSize}
-              color={"#372549"}
-              className={` ${isCollapsed ? "m-auto" : ""} `}
-            />
-            {!isCollapsed && (
-              <span className=" font-opensans font-semibold ">Student</span>
-            )}
-          </div>
-
-          <div
-            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
-              !isCollapsed ? "pl-3 " : ""
-            } `}
-          >
-            <FaStar
-              size={iconSize}
-              color={"#372549"}
-              className={` ${isCollapsed ? "m-auto" : ""} `}
-            />
-            {!isCollapsed && (
-              <span className=" font-opensans font-semibold ">Parents</span>
-            )}
-          </div>
-          <div
-            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
-              !isCollapsed ? "pl-3 " : ""
-            } `}
-          >
-            {/* <FaStar
-              size={iconSize}
-              color={"#372549"}
-              className={` ${isCollapsed ? "m-auto" : ""} `}
-            /> */}
-            <Image
-              src="/images/meeting.svg"
-              width={iconSize}
-              height={iconSize}
-              alt="Eve icon"
-              className={` ${isCollapsed ? "m-auto" : ""} `}
-            />
-            {!isCollapsed && (
-              <span className=" font-opensans font-semibold ">Evening</span>
-            )}
-          </div>
-          <div
-            className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
-              !isCollapsed ? "pl-3 " : ""
-            } `}
-          >
-            <FaCog
-              size={iconSize}
-              color={"#372549"}
-              className={` ${isCollapsed ? "m-auto" : ""} `}
-            />
-            {!isCollapsed && (
-              <span className=" font-opensans font-semibold ">Settings</span>
-            )}
-          </div>
+          <Link href={"/students"}>
+            <div
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                currentRoute == "/students" ? "bg-[#e0e0e0]" : ""
+              } ${!isCollapsed ? "pl-3 " : ""} `}
+            >
+              <PiStudent
+                size={iconSize}
+                color={"#372549"}
+                className={` ${isCollapsed ? "m-auto" : ""} `}
+              />
+              {!isCollapsed && (
+                <span className=" font-opensans font-semibold ">Student</span>
+              )}
+            </div>
+          </Link>
+          <Link href={"/parents"}>
+            <div
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                currentRoute == "/parents" ? "bg-[#e0e0e0]" : ""
+              } ${!isCollapsed ? "pl-3 " : ""} `}
+            >
+              <FaStar
+                size={iconSize}
+                color={"#372549"}
+                className={` ${isCollapsed ? "m-auto" : ""} `}
+              />
+              {!isCollapsed && (
+                <span className=" font-opensans font-semibold ">Parents</span>
+              )}
+            </div>
+          </Link>
+          <Link href={"/evenings"}>
+            <div
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                currentRoute == "/evenings" ? "bg-[#e0e0e0]" : ""
+              } ${!isCollapsed ? "pl-3 " : ""} `}
+            >
+              <Image
+                src="/images/meeting.svg"
+                width={iconSize}
+                height={iconSize}
+                alt="Eve icon"
+                className={` ${isCollapsed ? "m-auto" : ""} `}
+              />
+              {!isCollapsed && (
+                <span className=" font-opensans font-semibold ">Evening</span>
+              )}
+            </div>
+          </Link>
+          <Link href={"/settings"}>
+            <div
+              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                currentRoute == "/settings" ? "bg-[#e0e0e0]" : ""
+              } ${!isCollapsed ? "pl-3 " : ""} `}
+            >
+              <FaCog
+                size={iconSize}
+                color={"#372549"}
+                className={` ${isCollapsed ? "m-auto" : ""} `}
+              />
+              {!isCollapsed && (
+                <span className=" font-opensans font-semibold ">Settings</span>
+              )}
+            </div>
+          </Link>
         </div>
       </div>
 
