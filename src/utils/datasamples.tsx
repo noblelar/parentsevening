@@ -171,9 +171,9 @@ export const appointments: Appointment[] = [
   {
     appointment_id: 0,
     evening_id: 1,
-    parent_id: null,
+    parent_id: 6,
     teacher_id: 0,
-    student_id: null,
+    student_id: 3,
     venue: null,
     status: "available",
     starting_time: "16:00",
