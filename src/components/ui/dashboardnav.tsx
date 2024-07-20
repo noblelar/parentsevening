@@ -1,22 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "./button";
 import { dashboardNavList } from "@/utils/datasamples";
 import { useRouter } from "next/router";
+import Modal from "../modals/modal";
+import Add_teachermenu from "../modals/forms/add_teachermenu";
 
 const navlist = dashboardNavList;
 
 const DashboardNav = () => {
   const cur_route = useRouter();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className=" w-full bg-primary_dark sticky top-[0px] z-20 ">
       <div className=" container m-auto flex justify-center p-2 space-x-2 ">
         {navlist.map((nav_item, id) => {
-          if ((nav_item.pathname == cur_route.pathname)) {
+          if (nav_item.pathname == cur_route.pathname) {
             return (
               <Button
                 key={id}
-                onClick={() => {}}
+                onClick={openModal}
                 text={nav_item.text}
                 pathname={""}
               />
@@ -24,6 +36,9 @@ const DashboardNav = () => {
           }
         })}
       </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <Add_teachermenu onClose={closeModal} />
+      </Modal>
     </div>
   );
 };
