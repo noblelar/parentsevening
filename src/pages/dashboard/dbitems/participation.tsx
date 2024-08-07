@@ -62,7 +62,7 @@ const data = [
 const Revenue = () => {
   return (
     <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-lg font-semibold">Revenue</h2>
+      <h2 className="text-lg font-semibold">Evening Participation</h2>
       <p className="text-2xl font-bold text-green-600">IDR 7.852.000</p>
       <p className="text-sm text-gray-500">↑ 2.1% vs last week</p>
       <p className="text-gray-600 mt-2">Sales from 1-12 Dec, 2020</p>

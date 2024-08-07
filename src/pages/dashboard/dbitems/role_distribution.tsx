@@ -5,23 +5,23 @@ import React from 'react'
 const MostOrderedFood = () => {
   return (
    <div className="bg-white p-4 rounded shadow">
-   <h2 className="text-lg font-semibold">Most Ordered Food</h2>
+   <h2 className="text-lg font-semibold">User Roles Distribution</h2>
    <div className="mt-4 space-y-2">
        <div className="flex justify-between items-center">
-           <span>Fresh Salad Bowl</span>
-           <span>IDR 45.000</span>
+           <span>Managers</span>
+           <span>11</span>
        </div>
        <div className="flex justify-between items-center">
-           <span>Chicken Noodles</span>
-           <span>IDR 75.000</span>
+           <span>Teachers</span>
+           <span>82</span>
        </div>
        <div className="flex justify-between items-center">
-           <span>Smoothie Fruits</span>
-           <span>IDR 45.000</span>
+           <span>Parents</span>
+           <span>477</span>
        </div>
        <div className="flex justify-between items-center">
-           <span>Hot Chicken Wings</span>
-           <span>IDR 45.000</span>
+           <span>Students</span>
+           <span>611</span>
        </div>
    </div>
 </div>

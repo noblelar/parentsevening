@@ -25,8 +25,8 @@ const data02 = [
 const OrderTime = () => {
   return (
     <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-lg font-semibold">Order Time</h2>
-      <p className="text-gray-600">From 1-6 Dec, 2020</p>
+      <h2 className="text-lg font-semibold">Feedback</h2>
+      <p className="text-gray-600">From August 2023 - Date</p>
       <div className="mt-4 h-64 ">
         {/* Placeholder for pie chart */}
         
@@ -54,9 +54,10 @@ const OrderTime = () => {
           </PieChart>
         </ResponsiveContainer>
         <div className="flex justify-around mt-2 text-sm text-gray-600">
-          <div>Afternoon 40%</div>
-          <div>Evening 32%</div>
-          <div>Morning 28%</div>
+          <div>Year 7 35%</div>
+          <div>Year 8 35%</div>
+          <div>Year 9 20%</div>
+          <div>Year 10 10%</div>
         </div>
       </div>
     </div>
