@@ -4,6 +4,7 @@ import Footer from "./footer";
 import Sidebar from "./sidebar";
 import { useRouter } from "next/router";
 import LoginPage from "../login";
+// import OTPPage from "../login/verify";
 
 // import Sidebar from "../ui/sidebar";
 
@@ -13,7 +14,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
 
   const currentRoute = route.asPath;
 
-  if (currentRoute == "/login") {
+  if (currentRoute == "/login" || currentRoute == "/login/verify") {
     // if (cookie && cookie.access_token) {
     return (
       <>
@@ -21,6 +22,14 @@ const Layout = ({ children }: { children: ReactElement }) => {
       </>
     );
   }
+
+  // if (currentRoute == "/login/verify") {
+  //   return (
+  //     <>
+  //       <OTPPage />
+  //     </>
+  //   );
+  // }
 
   return (
     <>
