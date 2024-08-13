@@ -1,8 +1,27 @@
 import React from "react";
 import { FaSearch, FaBell, FaUserCircle } from "react-icons/fa";
 // import './styles/Header.css';
+import cookie from "cookie";
+import { useRouter } from "next/router";
 
 const Header: React.FC = () => {
+  const route = useRouter()
+
+  const handleLogOut = async () => {
+    const response = await fetch("/api/auth/logout/route", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // body: JSON.stringify(loginData),
+    });
+
+    if(response.ok){
+      route.push('/login');
+    }
+
+  };
+
   return (
     <div className="header flex justify-between align-middle items-center py-[10px] px-[20px] bg-white/40  border-b-2 border-primary_light border-solid text-primary_dark ">
       <div className="flex items-center ">
@@ -12,13 +31,20 @@ const Header: React.FC = () => {
         </div>
         <div className=" flex items-center bg-[#f4f4f4] py-[5px] px-[10px] rounded-[4px] ">
           <FaSearch className="mr-2 text-[#9e9e9e] " />
-          <input type="text" placeholder="Search" className=" border-none bg-transparent outline-none w-[200px] " />
+          <input
+            type="text"
+            placeholder="Search"
+            className=" border-none bg-transparent outline-none w-[200px] "
+          />
         </div>
       </div>
       <div className="flex items-center">
         <FaBell className="text-[18px] mr-5 cursor-pointer " />
         {/* ! Use group hove from here  and resume to finish header */}
-        <div className=" header-user group-hover: flex items-center relative cursor-pointer">
+        <div
+          className=" header-user group-hover: flex items-center relative cursor-pointer"
+          onClick={handleLogOut}
+        >
           <FaUserCircle className="text-6 mr-3 " />
           <span>Admin</span>
           {/* <div className="header-dropdown">
@@ -35,4 +61,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-

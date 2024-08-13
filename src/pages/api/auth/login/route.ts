@@ -38,7 +38,7 @@ const login = async function (req: NextApiRequest, res: NextApiResponse) {
           }),
         ]);
 
-        res.send({ user: verifyJWT(data?.token) });
+        res.send({ success: true, user: verifyJWT(data?.token) });
         return;
       } catch {
         res
@@ -75,7 +75,8 @@ const login = async function (req: NextApiRequest, res: NextApiResponse) {
           }),
         ]);
 
-        res.send({ user: verifyJWT(data?.token) });
+        // ! Also handle what you do whith jwt token and what you will do with it
+        res.send({ success: true, user: verifyJWT(data?.token) });
         return;
       } catch {
         res
@@ -92,6 +93,8 @@ const login = async function (req: NextApiRequest, res: NextApiResponse) {
 
 export default login;
 
+
+//!  Fix the server side prop
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   if (req.headers.cookie) {
     let cookies = cookie.parse(req.headers.cookie);

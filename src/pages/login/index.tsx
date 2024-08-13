@@ -1,7 +1,29 @@
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
+import cookie from "cookie";
+
+//!  Fix the server side prop
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  if (req.headers.cookie) {
+    let cookies = cookie.parse(req.headers.cookie);
+
+    if (cookies && cookies.access_token) {
+      return {
+        redirect: {
+          destination: "/dashboard",
+          permanent: false,
+        },
+      };
+    }
+  }
+
+  return {
+    props: {},
+  };
+};
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -41,6 +63,10 @@ export default function LoginPage() {
 
       if (response.ok) {
         console.log("Login successful:", data);
+        if (data.success === true) {
+          route.push("/dashboard");
+        }
+
         // Redirect or perform further actions here
       } else {
         console.error("Login failed:", data);
@@ -59,6 +85,7 @@ export default function LoginPage() {
       if (response.ok) {
         console.log("Login successful:", data);
         // Redirect or perform further actions here
+        
         setCodeEmail(true);
       } else {
         console.error("Login failed:", data);
@@ -91,6 +118,9 @@ export default function LoginPage() {
     if (response.ok) {
       console.log("OTP verification successful:", data);
       // Redirect or perform further actions here
+      if (data.success === true) {
+        route.push("/dashboard");
+      }
     } else {
       console.error("OTP verification failed:", data);
       // Handle errors here, such as showing an error message to the user
