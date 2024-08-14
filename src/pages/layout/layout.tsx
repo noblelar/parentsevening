@@ -4,6 +4,8 @@ import Footer from "./footer";
 import Sidebar from "./sidebar";
 import { useRouter } from "next/router";
 import LoginPage from "../login";
+import Dashboard from "../dashboard";
+// import GlobalState, { GlobalContext } from "@/context";
 // import OTPPage from "../login/verify";
 
 // import Sidebar from "../ui/sidebar";
@@ -14,6 +16,8 @@ const Layout = ({ children }: { children: ReactElement }) => {
 
   const currentRoute = route.asPath;
 
+  const landingPage = currentRoute == "/" ? <Dashboard /> : null;
+
   if (currentRoute == "/login" || currentRoute == "/login/verify") {
     // if (cookie && cookie.access_token) {
     return (
@@ -23,14 +27,6 @@ const Layout = ({ children }: { children: ReactElement }) => {
     );
   }
 
-  // if (currentRoute == "/login/verify") {
-  //   return (
-  //     <>
-  //       <OTPPage />
-  //     </>
-  //   );
-  // }
-
   return (
     <>
       <Header />
@@ -38,6 +34,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
         <div className=" flex justify-between">
           <Sidebar />
           {children}
+          {landingPage ? landingPage : null}
         </div>
       </main>
       <Footer />

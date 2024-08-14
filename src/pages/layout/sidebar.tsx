@@ -14,6 +14,7 @@ import { IoCalendarOutline } from "react-icons/io5";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { RiLogoutCircleLine } from "react-icons/ri";
 // import './styles/sidebar.css';
 // import "../../../styles/sidebar.css";
 
@@ -33,6 +34,20 @@ const Sidebar = () => {
     isCollapsed ? setIconSize(35) : setIconSize(22);
     console.log(iconSize);
   }, [isCollapsed]);
+
+  const handleLogOut = async () => {
+    const response = await fetch("/api/auth/logout/route", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // body: JSON.stringify(loginData),
+    });
+
+    if (response.ok) {
+      route.push("/login");
+    }
+  };
 
   return (
     <div
@@ -200,6 +215,19 @@ const Sidebar = () => {
           />
           {!isCollapsed && (
             <span className=" font-abel font-semibold ">Help</span>
+          )}
+        </div>
+        <div
+          className={`flex items-center space-x-3 py-2 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+            !isCollapsed ? "pl-3 " : ""
+          } `} onClick={handleLogOut}
+        >
+          <RiLogoutCircleLine
+            color={"#372549"}
+            className={` ${isCollapsed ? "m-auto" : ""} `}
+          />
+          {!isCollapsed && (
+            <span className=" font-abel font-semibold ">Logout</span>
           )}
         </div>
       </div>

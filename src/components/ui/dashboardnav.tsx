@@ -1,9 +1,12 @@
+"use client"
 import React, { useState } from "react";
 import Button from "./button";
 import { dashboardNavList } from "@/utils/datasamples";
 import { useRouter } from "next/router";
 import Modal from "../modals/modal";
 import Add_teachermenu from "../modals/forms/add_teachermenu";
+import CreateEvening from "../modals/forms/create_evening";
+// import { cookies } from "next/headers";
 
 const navlist = dashboardNavList;
 
@@ -36,8 +39,12 @@ const DashboardNav = () => {
           }
         })}
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <Add_teachermenu onClose={closeModal} />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        formTitle={"Create New Evening"}
+      >
+        <CreateEvening onClose={closeModal} />
       </Modal>
     </div>
   );

@@ -1,26 +1,57 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { FaSearch, FaBell, FaUserCircle } from "react-icons/fa";
-// import './styles/Header.css';
-import cookie from "cookie";
 import { useRouter } from "next/router";
 
+// Using local storage
+const StoreData = (email: any, user_id: any, firstname: any, role: any) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("userId", user_id);
+    localStorage.setItem("email", email);
+    localStorage.setItem("first_name", firstname);
+    localStorage.setItem("role", role);
+  }
+};
+
+// ! To be accessed for button visibility control
+export const getUserData = async () => {
+  // const user_id = userid;
+  // console.log(userid);
+  const response = await fetch("/api/get_user/route", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}),
+  });
+
+  const data = await response.json();
+
+  const userDataa = data;
+  console.log("User_Info:", data);
+
+  return JSON.stringify(userDataa);
+};
+
+export const User_Info = () => {
+  return Promise.resolve(getUserData());
+};
+
 const Header: React.FC = () => {
-  const route = useRouter()
+  const route = useRouter();
 
-  const handleLogOut = async () => {
-    const response = await fetch("/api/auth/logout/route", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // body: JSON.stringify(loginData),
-    });
+  const [firstName, setFirstName] = useState("");
+  const [user_id, setUserID] = useState<any>(null);
+  useEffect(() => {
+    localStorage.removeItem("first_name");
+    let name = localStorage.getItem("first_name");
+    let user_id = localStorage.getItem("userId");
+    setFirstName(name ?? "");
+    setUserID(user_id ?? null);
+  }, []);
 
-    if(response.ok){
-      route.push('/login');
-    }
-
-  };
+  // console.log(user_id)
+  console.log(Promise.resolve(getUserData()));
 
   return (
     <div className="header flex justify-between align-middle items-center py-[10px] px-[20px] bg-white/40  border-b-2 border-primary_light border-solid text-primary_dark ">
@@ -41,12 +72,9 @@ const Header: React.FC = () => {
       <div className="flex items-center">
         <FaBell className="text-[18px] mr-5 cursor-pointer " />
         {/* ! Use group hove from here  and resume to finish header */}
-        <div
-          className=" header-user group-hover: flex items-center relative cursor-pointer"
-          onClick={handleLogOut}
-        >
+        <div className=" header-user group-hover: flex items-center relative cursor-pointer">
           <FaUserCircle className="text-6 mr-3 " />
-          <span>Admin</span>
+          <span>Admin {firstName}</span>
           {/* <div className="header-dropdown">
             <ul>
               <li>Profile</li>

@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
 import cookie from "cookie";
@@ -34,6 +34,16 @@ export default function LoginPage() {
 
   const route = useRouter();
 
+  // Using local storage
+  const StoreData = (email: any, user_id: any, firstname: any, role: any) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("userId", user_id);
+      localStorage.setItem("email", email);
+      localStorage.setItem("first_name", firstname);
+      localStorage.setItem("role", role);
+    }
+  };
+
   const handleLoginMode = () => {
     setLoginMode(!login_mode);
   };
@@ -63,7 +73,17 @@ export default function LoginPage() {
 
       if (response.ok) {
         console.log("Login successful:", data);
+        console.log(data.user.user_info.username);
+        const firstname = data.user.user_info.Teacher.first_name
+          ? data.user.user_info.Teacher.first_name
+          : data.user.user_info.Parent.first_name;
         if (data.success === true) {
+          StoreData(
+            data.user.user_info.username,
+            data.user.user_info.user_id,
+            firstname,
+            data.user.user_info.Role.role_type
+          );
           route.push("/dashboard");
         }
 
@@ -85,7 +105,7 @@ export default function LoginPage() {
       if (response.ok) {
         console.log("Login successful:", data);
         // Redirect or perform further actions here
-        
+
         setCodeEmail(true);
       } else {
         console.error("Login failed:", data);
@@ -117,8 +137,17 @@ export default function LoginPage() {
 
     if (response.ok) {
       console.log("OTP verification successful:", data);
-      // Redirect or perform further actions here
+      console.log(data.user.user_info.username);
+      const firstname = data.user.user_info.Teacher.first_name
+        ? data.user.user_info.Teacher.first_name
+        : data.user.user_info.Parent.first_name;
       if (data.success === true) {
+        StoreData(
+          data.user.user_info.username,
+          data.user.user_info.user_id,
+          firstname,
+          data.user.user_info.Role.role_type
+        );
         route.push("/dashboard");
       }
     } else {
