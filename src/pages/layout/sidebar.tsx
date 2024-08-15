@@ -45,6 +45,7 @@ const Sidebar = () => {
     });
 
     if (response.ok) {
+      localStorage.clear();
       route.push("/login");
     }
   };
@@ -220,7 +221,8 @@ const Sidebar = () => {
         <div
           className={`flex items-center space-x-3 py-2 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
             !isCollapsed ? "pl-3 " : ""
-          } `} onClick={handleLogOut}
+          } `}
+          onClick={handleLogOut}
         >
           <RiLogoutCircleLine
             color={"#372549"}

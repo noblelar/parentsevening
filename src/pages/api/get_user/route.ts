@@ -4,11 +4,7 @@ import { verifyJWT } from "@/utils/middleware";
 
 const getUserData = async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
-    // if (!req.body) return res.status(401).send({});
-    // console.log(req.body);
-    // const { userid } = req.body;
-    // console.log(user_id);
-    
+
     if (req.headers.cookie) {
       let cookies = cookie.parse(req.headers.cookie);
       const userData = JSON.parse(

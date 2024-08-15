@@ -5,10 +5,6 @@ import Sidebar from "./sidebar";
 import { useRouter } from "next/router";
 import LoginPage from "../login";
 import Dashboard from "../dashboard";
-// import GlobalState, { GlobalContext } from "@/context";
-// import OTPPage from "../login/verify";
-
-// import Sidebar from "../ui/sidebar";
 
 const Layout = ({ children }: { children: ReactElement }) => {
   const route = useRouter();

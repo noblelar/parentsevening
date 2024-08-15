@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
@@ -25,6 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   };
 };
 
+// ! Login Component start here
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

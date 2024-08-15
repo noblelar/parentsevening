@@ -1,6 +1,7 @@
 // const jwt = require("jsonwebtoken");
 // import { exportTraceState } from "next/dist/trace";
 import jwt from "jsonwebtoken";
+import { GetServerSideProps } from "next";
 
 export const verifyJWT = (token: any) => {
   if (token) {
@@ -8,3 +9,5 @@ export const verifyJWT = (token: any) => {
     return decode
   }
 };
+
+

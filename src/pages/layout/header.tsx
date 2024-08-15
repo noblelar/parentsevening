@@ -2,16 +2,19 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaBell, FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+// import { getServerSideProps } from "@/utils/middleware";
+// import { getServerSideProps } from "../login";
 
 // Using local storage
-const StoreData = (email: any, user_id: any, firstname: any, role: any) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("userId", user_id);
-    localStorage.setItem("email", email);
-    localStorage.setItem("first_name", firstname);
-    localStorage.setItem("role", role);
-  }
-};
+// const StoreData = (email: any, user_id: any, firstname: any, role: any) => {
+//   if (typeof window !== "undefined") {
+//     localStorage.setItem("userId", user_id);
+//     localStorage.setItem("email", email);
+//     localStorage.setItem("first_name", firstname);
+//     localStorage.setItem("role", role);
+//   }
+// };
 
 // ! To be accessed for button visibility control
 export const getUserData = async () => {
@@ -33,25 +36,22 @@ export const getUserData = async () => {
   return JSON.stringify(userDataa);
 };
 
-export const User_Info = () => {
-  return Promise.resolve(getUserData());
-};
 
-const Header: React.FC = () => {
-  const route = useRouter();
+const Header: React.FC = ({ user }: any) => {
+  // const users = getServerSideProps;
 
   const [firstName, setFirstName] = useState("");
   const [user_id, setUserID] = useState<any>(null);
   useEffect(() => {
-    localStorage.removeItem("first_name");
+    // localStorage.removeItem("first_name");
     let name = localStorage.getItem("first_name");
     let user_id = localStorage.getItem("userId");
     setFirstName(name ?? "");
     setUserID(user_id ?? null);
   }, []);
 
-  // console.log(user_id)
-  console.log(Promise.resolve(getUserData()));
+
+  // console.log(users);
 
   return (
     <div className="header flex justify-between align-middle items-center py-[10px] px-[20px] bg-white/40  border-b-2 border-primary_light border-solid text-primary_dark ">

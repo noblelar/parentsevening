@@ -1,6 +1,3 @@
-
-
-
 import cookie from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -18,8 +15,8 @@ const logout = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res.send({});
   } else {
-    res.send({remark: `${req.method} is not allowed`, success: true})
+    res.send({ remark: `${req.method} is not allowed`, success: true });
   }
 };
 
-export default logout;
+export default logout;
