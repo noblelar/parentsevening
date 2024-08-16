@@ -5,27 +5,29 @@ import Rating from "./dbitems/rating";
 import MostOrderedFood from "./dbitems/role_distribution";
 import Orders from "./dbitems/orders";
 import DashboardNav from "@/components/ui/dashboardnav";
-import { GetServerSideProps, NextApiRequest, NextApiResponse } from "next";
+import { GetServerSideProps } from "next";
 import cookie from "cookie";
 import { verifyJWT } from "@/utils/middleware";
+import Layout from "../layout/layout";
+import { IBaseLayout } from "@/utils/data_interface";
 
-// import Button from "../components/ui/button";
-
-const Dashboard = ({props}: any) => {
+const Dashboard: React.FC<IBaseLayout> = ({ props }: any) => {
   console.log(props);
   return (
-    <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8 ">
-      <DashboardNav />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Revenue />
-        <OrderTime />
+    <Layout>
+      <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8 ">
+        <DashboardNav />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Revenue />
+          <OrderTime />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Rating />
+          <MostOrderedFood />
+        </div>
+        <Orders />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Rating />
-        <MostOrderedFood />
-      </div>
-      <Orders />
-    </div>
+    </Layout>
   );
 };
 

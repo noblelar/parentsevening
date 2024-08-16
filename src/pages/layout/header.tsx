@@ -1,20 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaBell, FaUserCircle } from "react-icons/fa";
-import { useRouter } from "next/router";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-// import { getServerSideProps } from "@/utils/middleware";
-// import { getServerSideProps } from "../login";
-
-// Using local storage
-// const StoreData = (email: any, user_id: any, firstname: any, role: any) => {
-//   if (typeof window !== "undefined") {
-//     localStorage.setItem("userId", user_id);
-//     localStorage.setItem("email", email);
-//     localStorage.setItem("first_name", firstname);
-//     localStorage.setItem("role", role);
-//   }
-// };
 
 // ! To be accessed for button visibility control
 export const getUserData = async () => {

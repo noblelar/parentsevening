@@ -62,3 +62,9 @@ export interface Student {
 
 
 
+export interface IBaseLayout {
+   child: React.ReactNode | null;
+   title: string;
+ }
+ 
+

@@ -12,7 +12,8 @@ const Layout = ({ children }: { children: ReactElement }) => {
 
   const currentRoute = route.asPath;
 
-  const landingPage = currentRoute == "/" ? <Dashboard /> : null;
+  const landingPage =
+    currentRoute == "/" ? <Dashboard child={null} title={""} /> : null;
 
   if (currentRoute == "/login" || currentRoute == "/login/verify") {
     // if (cookie && cookie.access_token) {
