@@ -11,10 +11,10 @@ import { verifyJWT } from "@/utils/middleware";
 import Layout from "../layout/layout";
 import { IBaseLayout } from "@/utils/data_interface";
 
-const Dashboard: React.FC<IBaseLayout> = ({ props }: any) => {
-  console.log(props);
+const Dashboard: React.FC<IBaseLayout> = (props: any) => {
+  // console.log(props);
   return (
-    <Layout>
+    <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8 ">
         <DashboardNav />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -40,11 +40,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       let cookies = cookie.parse(req.headers.cookie);
 
       if (cookies && cookies.access_token) {
-        console.log(cookies.access_token);
+        // console.log(cookies.access_token);
         const userData = JSON.parse(
           JSON.stringify(verifyJWT(cookies.access_token))
         );
-        console.log(userData);
+        // console.log(userData);
 
         const user_id = userData.user_info.user_id;
         return user_id;
@@ -77,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     );
 
     const data = await response.json();
-    console.log("API Response:", data);
+    // console.log("API Response:", data);
 
     // Return user data as props
     return {

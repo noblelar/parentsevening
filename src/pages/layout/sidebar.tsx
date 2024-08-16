@@ -18,13 +18,20 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 // import './styles/sidebar.css';
 // import "../../../styles/sidebar.css";
 
-const Sidebar = () => {
+const Sidebar = (user: any) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [iconSize, setIconSize] = useState(25);
 
   const route = useRouter();
-  console.log(route);
   const currentRoute = route.asPath;
+
+  // console.log(user.user.user.Teacher.first_name);
+  //  ! Checking the user type
+  const userDetail = user.user.user;
+  const adminCheck = userDetail.Role.role_type === "admin";
+  const teacherCheck = userDetail.Role.role_type === "teacher";
+  const parentCheck = userDetail.Role.role_type === "parent";
+  console.log(adminCheck, teacherCheck, parentCheck);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -72,22 +79,26 @@ const Sidebar = () => {
         </div>
 
         <div className=" mt-4 ">
-          <Link href={"/dashboard"}>
-            <div
-              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] ${
-                currentRoute == "/dashboard" ? "bg-[#e0e0e0]" : ""
-              } rounded-lg text-primary_dark ${!isCollapsed ? "pl-3 " : ""} `}
-            >
-              <FaTachometerAlt
-                size={iconSize}
-                color={"#372549"}
-                className={` ${isCollapsed ? "m-auto" : ""} `}
-              />
-              {!isCollapsed && (
-                <span className=" font-opensans font-semibold ">Dashboard</span>
-              )}
-            </div>
-          </Link>
+          {teacherCheck || adminCheck ? (
+            <Link href={"/dashboard"}>
+              <div
+                className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] ${
+                  currentRoute == "/dashboard" ? "bg-[#e0e0e0]" : ""
+                } rounded-lg text-primary_dark ${!isCollapsed ? "pl-3 " : ""} `}
+              >
+                <FaTachometerAlt
+                  size={iconSize}
+                  color={"#372549"}
+                  className={` ${isCollapsed ? "m-auto" : ""} `}
+                />
+                {!isCollapsed && (
+                  <span className=" font-opensans font-semibold ">
+                    Dashboard
+                  </span>
+                )}
+              </div>
+            </Link>
+          ) : null}
           <Link href={"/appointments"}>
             <div
               className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
@@ -106,22 +117,27 @@ const Sidebar = () => {
               )}
             </div>
           </Link>
-          <Link href={"/teachers"}>
-            <div
-              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
-                currentRoute == "/teachers" ? "bg-[#e0e0e0]" : ""
-              } ${!isCollapsed ? "pl-3 " : ""} `}
-            >
-              <GiTeacher
-                size={iconSize}
-                color={"#372549"}
-                className={` ${isCollapsed ? "m-auto" : ""} `}
-              />
-              {!isCollapsed && (
-                <span className=" font-opensans font-semibold ">Teachers</span>
-              )}
-            </div>
-          </Link>
+          {adminCheck ? (
+            <Link href={"/teachers"}>
+              <div
+                className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                  currentRoute == "/teachers" ? "bg-[#e0e0e0]" : ""
+                } ${!isCollapsed ? "pl-3 " : ""} `}
+              >
+                <GiTeacher
+                  size={iconSize}
+                  color={"#372549"}
+                  className={` ${isCollapsed ? "m-auto" : ""} `}
+                />
+                {!isCollapsed && (
+                  <span className=" font-opensans font-semibold ">
+                    Teachers
+                  </span>
+                )}
+              </div>
+            </Link>
+          ) : null}
+
           <Link href={"/students"}>
             <div
               className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
@@ -154,24 +170,27 @@ const Sidebar = () => {
               )}
             </div>
           </Link>
-          <Link href={"/evenings"}>
-            <div
-              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
-                currentRoute == "/evenings" ? "bg-[#e0e0e0]" : ""
-              } ${!isCollapsed ? "pl-3 " : ""} `}
-            >
-              <Image
-                src="/images/meeting.svg"
-                width={iconSize}
-                height={iconSize}
-                alt="Eve icon"
-                className={` ${isCollapsed ? "m-auto" : ""} `}
-              />
-              {!isCollapsed && (
-                <span className=" font-opensans font-semibold ">Evening</span>
-              )}
-            </div>
-          </Link>
+          {teacherCheck || adminCheck ? (
+            <Link href={"/evenings"}>
+              <div
+                className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                  currentRoute == "/evenings" ? "bg-[#e0e0e0]" : ""
+                } ${!isCollapsed ? "pl-3 " : ""} `}
+              >
+                <Image
+                  src="/images/meeting.svg"
+                  width={iconSize}
+                  height={iconSize}
+                  alt="Eve icon"
+                  className={` ${isCollapsed ? "m-auto" : ""} `}
+                />
+                {!isCollapsed && (
+                  <span className=" font-opensans font-semibold ">Evening</span>
+                )}
+              </div>
+            </Link>
+          ) : null}
+
           <Link href={"/settings"}>
             <div
               className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${

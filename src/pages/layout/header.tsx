@@ -2,42 +2,21 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaBell, FaUserCircle } from "react-icons/fa";
 
-// ! To be accessed for button visibility control
-export const getUserData = async () => {
-  // const user_id = userid;
-  // console.log(userid);
-  const response = await fetch("/api/get_user/route", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({}),
-  });
-
-  const data = await response.json();
-
-  const userDataa = data;
-  console.log("User_Info:", data);
-
-  return JSON.stringify(userDataa);
-};
-
-
-const Header: React.FC = ({ user }: any) => {
+const Header = (user: any) => {
   // const users = getServerSideProps;
 
   const [firstName, setFirstName] = useState("");
-  const [user_id, setUserID] = useState<any>(null);
   useEffect(() => {
-    // localStorage.removeItem("first_name");
     let name = localStorage.getItem("first_name");
-    let user_id = localStorage.getItem("userId");
+    // let user_id = localStorage.getItem("userId");
     setFirstName(name ?? "");
-    setUserID(user_id ?? null);
   }, []);
 
-
-  // console.log(users);
+  //  ! Checking the user type
+  const userDetail = user.user.user;
+  const adminCheck = userDetail.Role.role_type === "admin";
+  const teacherCheck = userDetail.Role.role_type === "teacher";
+  const parentCheck = userDetail.Role.role_type === "parent";
 
   return (
     <div className="header flex justify-between align-middle items-center py-[10px] px-[20px] bg-white/40  border-b-2 border-primary_light border-solid text-primary_dark ">
@@ -60,7 +39,11 @@ const Header: React.FC = ({ user }: any) => {
         {/* ! Use group hove from here  and resume to finish header */}
         <div className=" header-user group-hover: flex items-center relative cursor-pointer">
           <FaUserCircle className="text-6 mr-3 " />
-          <span>Admin {firstName}</span>
+          <span>
+            {adminCheck || teacherCheck
+              ? userDetail.Teacher.first_name
+              : userDetail.Parent.first_name}
+          </span>
           {/* <div className="header-dropdown">
             <ul>
               <li>Profile</li>

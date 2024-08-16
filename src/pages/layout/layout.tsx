@@ -6,14 +6,21 @@ import { useRouter } from "next/router";
 import LoginPage from "../login";
 import Dashboard from "../dashboard";
 
-const Layout = ({ children }: { children: ReactElement }) => {
+const Layout = ({
+  children,
+  user_data,
+}: {
+  children: ReactElement;
+  user_data: any;
+}) => {
   const route = useRouter();
   console.log(route);
+  // console.log(user_data);
 
   const currentRoute = route.asPath;
 
   const landingPage =
-    currentRoute == "/" ? <Dashboard child={null} title={""} /> : null;
+    currentRoute == "/" ? <Dashboard child={undefined} title={""} /> : null;
 
   if (currentRoute == "/login" || currentRoute == "/login/verify") {
     // if (cookie && cookie.access_token) {
@@ -26,10 +33,10 @@ const Layout = ({ children }: { children: ReactElement }) => {
 
   return (
     <>
-      <Header />
+      <Header user={user_data} />
       <main>
         <div className=" flex justify-between">
-          <Sidebar />
+          <Sidebar user={user_data} />
           {children}
           {landingPage ? landingPage : null}
         </div>
