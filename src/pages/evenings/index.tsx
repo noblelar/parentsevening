@@ -1,18 +1,32 @@
 import DashboardNav from "@/components/ui/dashboardnav";
 import React from "react";
 import EveningTable from "./eveningstable";
-import { evenings } from "@/utils/datasamples";
+// import { evenings } from "@/utils/datasamples";
 import cookie from "cookie";
 import { verifyJWT } from "@/utils/middleware";
 import { GetServerSideProps } from "next";
 import Layout from "../layout/layout";
 
+import { Evening } from "@/utils/data_interface";
+
 const Evenings = (props: any) => {
+  const evenings: Evening[] = props.evenings;
+  console.log(evenings);
+
+  const first_name = props.user;
+  console.log();
+
+  const no_evening = <div> No Evening Planned by or Managed By </div>;
+
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
         <DashboardNav />
-        <EveningTable evenings={evenings} />
+        {evenings.length === 0 ? (
+          no_evening
+        ) : (
+          <EveningTable evenings={evenings} />
+        )}
       </div>
     </Layout>
   );
@@ -32,6 +46,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
           JSON.stringify(verifyJWT(cookies.access_token))
         );
         // console.log(userData);
+
+        if (!userData.user_info) {
+          res.setHeader("Set-Cookie", [
+            cookie.serialize("access_token", "", {
+              httpOnly: true,
+              expires: new Date(0),
+              secure: process.env.NODE_ENV !== "development",
+              sameSite: "lax",
+              path: "/",
+            }),
+          ]);
+          return false;
+        }
 
         const user_id = userData.user_info.user_id;
         return user_id;
@@ -63,12 +90,24 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       }
     );
 
+    // Fetch user data from the API
+    const evening_Response = await fetch(
+      process.env.BACKEND_URL + "/evenings/planned-by/" + user_id,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     const data = await response.json();
+    const evening_Data = await evening_Response.json();
     // console.log("API Response:", data);
 
     // Return user data as props
     return {
-      props: { user: data }, // Adjust this depending on your API response structure
+      props: { user: data, evenings: evening_Data }, // Adjust this depending on your API response structure
     };
   } catch (error) {
     console.error("Error fetching user data:", error);

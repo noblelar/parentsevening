@@ -71,8 +71,10 @@ export default function LoginPage() {
       });
 
       const data = await response.json();
+      console.log(data)
 
       if (response.ok) {
+        console.log(data)
         console.log("Login successful:", data);
         console.log(data.user.user_info.username);
         const firstname = data.user.user_info.Teacher.first_name

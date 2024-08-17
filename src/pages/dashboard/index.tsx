@@ -44,7 +44,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         const userData = JSON.parse(
           JSON.stringify(verifyJWT(cookies.access_token))
         );
-        // console.log(userData);
+        // console.log(userData.name);
+
+        if (!userData.user_info) {
+          res.setHeader("Set-Cookie", [
+            cookie.serialize("access_token", "", {
+              httpOnly: true,
+              expires: new Date(0),
+              secure: process.env.NODE_ENV !== "development",
+              sameSite: "lax",
+              path: "/",
+            }),
+          ]);
+          return false;
+        }
 
         const user_id = userData.user_info.user_id;
         return user_id;
