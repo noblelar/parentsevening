@@ -1,7 +1,6 @@
 import DashboardNav from "@/components/ui/dashboardnav";
 import React from "react";
 import EveningTable from "./eveningstable";
-// import { evenings } from "@/utils/datasamples";
 import cookie from "cookie";
 import { verifyJWT } from "@/utils/middleware";
 import { GetServerSideProps } from "next";
@@ -11,12 +10,25 @@ import { Evening } from "@/utils/data_interface";
 
 const Evenings = (props: any) => {
   const evenings: Evening[] = props.evenings;
-  console.log(evenings);
+  // console.log(evenings);
 
-  const first_name = props.user;
-  console.log();
+  // const first_name = props.user.Teacher.first_name;
+  // console.log(first_name);
 
-  const no_evening = <div> No Evening Planned by or Managed By </div>;
+  //  ! Checking the user type
+  const userDetail = props.user;
+  const adminCheck = userDetail.Role.role_type === "admin";
+  const teacherCheck = userDetail.Role.role_type === "teacher";
+  const parentCheck = userDetail.Role.role_type === "parent";
+
+  const no_evening = (
+    <div>
+      No Evening Planned by or Managed By{" "}
+      {adminCheck || teacherCheck
+        ? userDetail.Teacher.first_name
+        : userDetail.Parent.first_name}
+    </div>
+  );
 
   return (
     <Layout user_data={props}>

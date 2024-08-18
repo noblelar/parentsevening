@@ -6,8 +6,13 @@ import cookie from "cookie";
 import { verifyJWT } from "@/utils/middleware";
 import { GetServerSideProps } from "next";
 import Layout from "../layout/layout";
+import { Student } from "@/utils/data_interface";
 
 const Students = (props: any) => {
+  console.log(props.students);
+
+  const students: Student[] = props.students;
+
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
@@ -32,6 +37,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
           JSON.stringify(verifyJWT(cookies.access_token))
         );
         // console.log(userData);
+
+        if (!userData.user_info) {
+          res.setHeader("Set-Cookie", [
+            cookie.serialize("access_token", "", {
+              httpOnly: true,
+              expires: new Date(0),
+              secure: process.env.NODE_ENV !== "development",
+              sameSite: "lax",
+              path: "/",
+            }),
+          ]);
+          return false;
+        }
 
         const user_id = userData.user_info.user_id;
         return user_id;
@@ -63,12 +81,21 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       }
     );
 
+    // Fetch user data from the API
+    const student_Response = await fetch(process.env.BACKEND_URL + "/student", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     const data = await response.json();
+    const student_Data = await student_Response.json();
     // console.log("API Response:", data);
 
     // Return user data as props
     return {
-      props: { user: data }, // Adjust this depending on your API response structure
+      props: { user: data, students: student_Data }, // Adjust this depending on your API response structure
     };
   } catch (error) {
     console.error("Error fetching user data:", error);

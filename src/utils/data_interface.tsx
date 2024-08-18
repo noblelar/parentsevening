@@ -1,30 +1,8 @@
-// export interface Evening {
-//    id: number;
-//    yearGroup: string;
-//    date: string;
-//    term: string;
-//    scheduledFor: string;
-//    startTime: string;
-//    endTime: string;
-//    plannedBy: string;
-// }
-
 export interface ButtonProps {
   pathname: string;
   onClick: () => void;
   text: string;
 }
-
-// Teacher Interface
-// export interface Teacher {
-//   id: number;
-//   firstname: string;
-//   lastname: string;
-//   email: string;
-//   subject: string;
-//   breaktime: string;
-//   contact: string;
-// }
 
 // Appointment Interface
 export interface Appointment {
@@ -41,14 +19,14 @@ export interface Appointment {
 }
 
 // Parent Interface
-export interface Parent {
-  id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
-  contact: string;
-  children: number;
-}
+// export interface Parent {
+//   id: number;
+//   firstname: string;
+//   lastname: string;
+//   email: string;
+//   contact: string;
+//   children: number;
+// }
 
 // Student Interface
 export interface Student {
@@ -64,6 +42,12 @@ export interface IBaseLayout {
 }
 
 // ! Upgrades
+
+export interface Role {
+  role_id: number;
+  role_type: string;
+  role_name: string;
+}
 
 export interface Evening {
   evening_id: number;
@@ -82,13 +66,50 @@ export interface Evening {
   // EveningManager: EveningManager[];
 }
 
- interface Teacher {
-   staff_id: number;         // Unique ID for the teacher
-   first_name: string;       // Teacher's first name
-   last_name: string;        // Teacher's last name
-   email: string;            // Teacher's email address
-   // Add other teacher-specific properties if needed
- }
+export interface Teacher {
+  staff_id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  contact_info: string;
+  availability: string;
+  subject: string;
+  // breaktime: string;
+}
+
+export interface Parent {
+  parent_id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  contact_info?: string | null;
+  // UserAccount: UserAccount;
+  // ParentChild: ParentChild[];
+  Appointment: Appointment[];
+}
+
+
+export interface Student {
+  student_id: number;
+  first_name: string;
+  last_name: string;
+  year_group: number;
+  email: string;
+  date_of_birth: string;
+  // ParentChild: ParentChild[];
+  Appointment: Appointment[];
+}
+
+
+
+// export interface UserAccountT {
+//   user_id: number;
+//   username: string;
+//   password: null;
+//   role_id: number;
+//   Teacher: Teacher;
+//   Role: Role;
+// }
 
 //  interface Appointment {
 //    appointment_id: number;   // Unique ID for the appointment

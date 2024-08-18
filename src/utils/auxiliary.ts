@@ -39,7 +39,7 @@ export const GetEveningStatus = (status: string) => {
 
       break;
     case "D":
-      publicStatus = "Done";
+      publicStatus = "Completed";
 
       break;
     case "E":
@@ -52,4 +52,13 @@ export const GetEveningStatus = (status: string) => {
   }
 
   return publicStatus;
+};
+
+export const MakeDate = (date: string) => {
+  const dateObject = new Date(date);
+
+  // Extract the date (in YYYY-MM-DD format)
+  const dateOnly = dateObject.toLocaleDateString("en-GB");
+
+  return dateOnly;
 };

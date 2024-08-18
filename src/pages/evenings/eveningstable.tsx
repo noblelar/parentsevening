@@ -19,12 +19,12 @@ const EveningTable: React.FC<EveningTableProps> = ({ evenings }) => {
   });
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
-  console.log(evenings)
-
+  // Search input handler
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({ ...filters, search: e.target.value });
   };
 
+  // Sorting handler
   const handleSort = (key: keyof Evening) => {
     let direction: "ascending" | "descending" = "ascending";
     if (
@@ -37,7 +37,7 @@ const EveningTable: React.FC<EveningTableProps> = ({ evenings }) => {
     setSortConfig({ key, direction });
   };
 
-
+  // Sorting logic
   const sortedEvenings = React.useMemo(() => {
     let sortableEvenings = [...evenings];
 
@@ -45,16 +45,17 @@ const EveningTable: React.FC<EveningTableProps> = ({ evenings }) => {
     if (sortConfig !== null) {
       sortableEvenings.sort((a, b) => {
         const key = sortConfig.key;
+        const aValue = a[key] || ""; // Fallback to empty string if undefined
+        const bValue = b[key] || ""; // Fallback to empty string if undefined
 
-        // Handle the case where the key exists in a and b objects
-        const aValue = a[key] ? a[key] : "A";
-        const bValue = b[key] ? b[key] : "A";
-
-        if (aValue < bValue) {
-          return sortConfig.direction === "ascending" ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return sortConfig.direction === "ascending" ? 1 : -1;
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          return sortConfig.direction === "ascending"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        } else if (typeof aValue === "number" && typeof bValue === "number") {
+          return sortConfig.direction === "ascending"
+            ? aValue - bValue
+            : bValue - aValue;
         }
         return 0;
       });
@@ -63,12 +64,21 @@ const EveningTable: React.FC<EveningTableProps> = ({ evenings }) => {
     return sortableEvenings;
   }, [evenings, sortConfig]);
 
+  // Filtering logic for search
   const filteredEvenings = sortedEvenings.filter((evening) => {
+    const searchValue = filters.search.toLowerCase();
+    // Filter by fields that are strings or numbers
     return (
-      filters.search === "" ||
-      Object.values(evening).some((value) =>
-        value.toString().toLowerCase().includes(filters.search.toLowerCase())
-      )
+      (evening.yeargroup?.toString() || "").includes(searchValue) ||
+      (evening.term?.toLowerCase() || "").includes(searchValue) ||
+      (GetDate(evening.date)?.toLocaleLowerCase() || "").includes(searchValue) ||
+      (evening.schedule_for?.toLowerCase() || "").includes(searchValue) ||
+      (evening.status?.toLowerCase() || "").includes(searchValue) ||
+      (evening.Teacher?.first_name.toLowerCase() || "").includes(searchValue) ||
+      (evening.Teacher?.last_name.toLowerCase() || "").includes(searchValue) ||
+      (GetTime(evening.start_time)?.toLocaleLowerCase() || "").includes(searchValue) ||
+      (GetTime(evening.start_time)?.toLocaleLowerCase() || "").includes(searchValue) 
+
     );
   });
 
@@ -90,14 +100,13 @@ const EveningTable: React.FC<EveningTableProps> = ({ evenings }) => {
             <tr>
               <th className="px-4 py-2 border-b"></th>
               {[
-                // "evening_id",
                 "yeargroup",
                 "date",
                 "term",
                 "schedule_for",
                 "start_time",
                 "end_time",
-                "plannedBy",
+                "planned_by",
                 "status",
               ].map((key) => (
                 <th
@@ -106,7 +115,8 @@ const EveningTable: React.FC<EveningTableProps> = ({ evenings }) => {
                   onClick={() => handleSort(key as keyof Evening)}
                 >
                   <div className="flex items-center justify-between">
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                    {key.charAt(0).toUpperCase() +
+                      key.slice(1).replace("_", " ")}
                     {sortConfig && sortConfig.key === key ? (
                       sortConfig.direction === "ascending" ? (
                         <FaSortUp />
@@ -140,22 +150,25 @@ const EveningTable: React.FC<EveningTableProps> = ({ evenings }) => {
                   <td className="px-4 py-2 border-b">
                     <input type="checkbox" value={evening.evening_id} />
                   </td>
-                  {/* <td className="px-4 py-2 border-b">{evening.evening_id}</td> */}
                   <td className="px-4 py-2 border-b">
-                    {evening.yeargroup ?? evening.yeargroup}
+                    {evening.yeargroup ?? "N/A"}
                   </td>
                   <td className="px-4 py-2 border-b">
                     {GetDate(evening.date)}
                   </td>
-                  <td className="px-4 py-2 border-b">{evening.term}</td>
-                  <td className="px-4 py-2 border-b">{evening.schedule_for}</td>
                   <td className="px-4 py-2 border-b">
-                    {evening.date ? GetTime(evening.start_time) : null}
+                    {evening.term || "N/A"}
                   </td>
                   <td className="px-4 py-2 border-b">
-                    {GetTime(evening.end_time)}
+                    {evening.schedule_for || "N/A"}
                   </td>
-                  <td className="px-4 py-2 border-b">{plannedBy}</td>
+                  <td className="px-4 py-2 border-b">
+                    {evening.start_time ? GetTime(evening.start_time) : "N/A"}
+                  </td>
+                  <td className="px-4 py-2 border-b">
+                    {evening.end_time ? GetTime(evening.end_time) : "N/A"}
+                  </td>
+                  <td className="px-4 py-2 border-b">{plannedBy || "N/A"}</td>
                   <td className="px-4 py-2 border-b">
                     {GetEveningStatus(evening.status)}
                   </td>
