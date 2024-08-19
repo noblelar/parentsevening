@@ -1,4 +1,7 @@
 export const GetDate = (date: string) => {
+  if (!date) {
+    return null;
+  }
   const dateObject = new Date(date);
 
   // Extract the date (in YYYY-MM-DD format)
@@ -55,6 +58,9 @@ export const GetEveningStatus = (status: string) => {
 };
 
 export const MakeDate = (date: string) => {
+  if (!date) {
+    return null;
+  }
   const dateObject = new Date(date);
 
   // Extract the date (in YYYY-MM-DD format)

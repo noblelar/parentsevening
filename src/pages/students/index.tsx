@@ -1,7 +1,6 @@
 import DashboardNav from "@/components/ui/dashboardnav";
 import React from "react";
 import StudentTable from "./studenttable";
-import { students } from "@/utils/datasamples";
 import cookie from "cookie";
 import { verifyJWT } from "@/utils/middleware";
 import { GetServerSideProps } from "next";
@@ -9,15 +8,34 @@ import Layout from "../layout/layout";
 import { Student } from "@/utils/data_interface";
 
 const Students = (props: any) => {
-  console.log(props.students);
+  // console.log(props.students);
 
   const students: Student[] = props.students;
+
+  //  ! Checking the user type
+  const userDetail = props.user;
+  const adminCheck = userDetail.Role.role_type === "admin";
+  const teacherCheck = userDetail.Role.role_type === "teacher";
+  const parentCheck = userDetail.Role.role_type === "parent";
+
+  const no_student = (
+    <div>
+      No Evening Planned by or Managed By{" "}
+      {adminCheck || teacherCheck
+        ? userDetail.Teacher.first_name
+        : userDetail.Parent.first_name}
+    </div>
+  );
 
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
         <DashboardNav />
-        <StudentTable students={students} />
+        {students.length === 0 ? (
+          no_student
+        ) : (
+          <StudentTable students={students} />
+        )}
       </div>
     </Layout>
   );

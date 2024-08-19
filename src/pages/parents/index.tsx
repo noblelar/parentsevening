@@ -1,7 +1,6 @@
 import DashboardNav from "@/components/ui/dashboardnav";
 import React from "react";
 import ParentTable from "./parenttable";
-import { parents } from "@/utils/datasamples";
 import { verifyJWT } from "@/utils/middleware";
 import { GetServerSideProps } from "next";
 import cookie from "cookie";
@@ -9,14 +8,29 @@ import Layout from "../layout/layout";
 import { Parent } from "@/utils/data_interface";
 
 const Parents = (props: any) => {
-  console.log(props);
+  // console.log(props);
   const parents: Parent[] = props.parents;
+
+  //  ! Checking the user type
+  const userDetail = props.user;
+  const adminCheck = userDetail.Role.role_type === "admin";
+  const teacherCheck = userDetail.Role.role_type === "teacher";
+  const parentCheck = userDetail.Role.role_type === "parent";
+
+  const no_parent = (
+    <div>
+      No Evening Planned by or Managed By{" "}
+      {adminCheck || teacherCheck
+        ? userDetail.Teacher.first_name
+        : userDetail.Parent.first_name}
+    </div>
+  );
 
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
         <DashboardNav />
-        <ParentTable parents={parents} />
+        {parents.length === 0 ? no_parent : <ParentTable parents={parents} />}
       </div>
     </Layout>
   );

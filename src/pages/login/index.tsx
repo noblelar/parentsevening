@@ -71,15 +71,20 @@ export default function LoginPage() {
       });
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
 
       if (response.ok) {
-        console.log(data)
+        console.log(data);
         console.log("Login successful:", data);
         console.log(data.user.user_info.username);
-        const firstname = data.user.user_info.Teacher.first_name
-          ? data.user.user_info.Teacher.first_name
-          : data.user.user_info.Parent.first_name;
+        console.log(data);
+        const usertype = data.user.user_info.Role.role_type;
+        let firstname;
+        if (usertype == "teacher" || usertype == "admin") {
+          firstname = data.user.user_info.Teacher.first_name;
+        } else {
+          firstname = data.user.user_info.Parent.first_name;
+        }
         if (data.success === true) {
           StoreData(
             data.user.user_info.username,
@@ -141,9 +146,14 @@ export default function LoginPage() {
     if (response.ok) {
       console.log("OTP verification successful:", data);
       console.log(data.user.user_info.username);
-      const firstname = data.user.user_info.Teacher.first_name
-        ? data.user.user_info.Teacher.first_name
-        : data.user.user_info.Parent.first_name;
+      console.log(data);
+      const usertype = data.user.user_info.Role.role_type;
+      let firstname;
+      if (usertype == "teacher" || usertype == "admin") {
+        firstname = data.user.user_info.Teacher.first_name;
+      } else {
+        firstname = data.user.user_info.Parent.first_name;
+      }
       if (data.success === true) {
         StoreData(
           data.user.user_info.username,
