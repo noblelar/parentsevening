@@ -95,21 +95,21 @@ export default login;
 
 
 //!  Fix the server side prop
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  if (req.headers.cookie) {
-    let cookies = cookie.parse(req.headers.cookie);
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+//   if (req.headers.cookie) {
+//     let cookies = cookie.parse(req.headers.cookie);
 
-    if (cookies && cookies.access_token) {
-      return {
-        redirect: {
-          destination: "/dashboard",
-          permanent: false,
-        },
-      };
-    }
-  }
+//     if (cookies && cookies.access_token) {
+//       return {
+//         redirect: {
+//           destination: "/dashboard",
+//           permanent: false,
+//         },
+//       };
+//     }
+//   }
 
-  return {
-    props: {},
-  };
-};
+//   return {
+//     props: {},
+//   };
+// };

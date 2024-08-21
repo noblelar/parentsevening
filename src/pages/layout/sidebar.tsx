@@ -79,7 +79,7 @@ const Sidebar = (user: any) => {
         </div>
 
         <div className=" mt-4 ">
-          {teacherCheck || adminCheck ? (
+          {teacherCheck || adminCheck || parentCheck ? (
             <Link href={"/dashboard"}>
               <div
                 className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] ${
@@ -154,22 +154,24 @@ const Sidebar = (user: any) => {
               )}
             </div>
           </Link>
-          <Link href={"/parents"}>
-            <div
-              className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
-                currentRoute == "/parents" ? "bg-[#e0e0e0]" : ""
-              } ${!isCollapsed ? "pl-3 " : ""} `}
-            >
-              <FaStar
-                size={iconSize}
-                color={"#372549"}
-                className={` ${isCollapsed ? "m-auto" : ""} `}
-              />
-              {!isCollapsed && (
-                <span className=" font-opensans font-semibold ">Parents</span>
-              )}
-            </div>
-          </Link>
+          {teacherCheck || adminCheck ? (
+            <Link href={"/parents"}>
+              <div
+                className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] rounded-lg text-primary_dark ${
+                  currentRoute == "/parents" ? "bg-[#e0e0e0]" : ""
+                } ${!isCollapsed ? "pl-3 " : ""} `}
+              >
+                <FaStar
+                  size={iconSize}
+                  color={"#372549"}
+                  className={` ${isCollapsed ? "m-auto" : ""} `}
+                />
+                {!isCollapsed && (
+                  <span className=" font-opensans font-semibold ">Parents</span>
+                )}
+              </div>
+            </Link>
+          ) : null}
           {teacherCheck || adminCheck ? (
             <Link href={"/evenings"}>
               <div
