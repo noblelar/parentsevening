@@ -9,14 +9,18 @@ import { GetServerSideProps } from "next";
 import cookie from "cookie";
 import { verifyJWT } from "@/utils/middleware";
 import Layout from "../layout/layout";
-import { IBaseLayout } from "@/utils/data_interface";
+import { Evening, IBaseLayout } from "@/utils/data_interface";
+import { useGlobalContext } from "@/context/GlobalContext";
+import Spinner from "@/components/spinner";
 
 const Dashboard: React.FC<IBaseLayout> = (props: any) => {
-  // console.log(props);
+  const { isLoading } = useGlobalContext();
+  const evenings: Evening[] = props.evenings;
+
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8 ">
-        <DashboardNav />
+        <DashboardNav evening_data={evenings} />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Revenue />
           <OrderTime />
@@ -89,12 +93,24 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       }
     );
 
+    // Fetch user Evening data from the API
+    const evening_Response = await fetch(
+      process.env.BACKEND_URL + "/evenings/planned-by/" + user_id,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     const data = await response.json();
+    const evening_Data = await evening_Response.json();
     // console.log("API Response:", data);
 
     // Return user data as props
     return {
-      props: { user: data }, // Adjust this depending on your API response structure
+      props: { user: data, evenings: evening_Data }, // Adjust this depending on your API response structure
     };
   } catch (error) {
     console.error("Error fetching user data:", error);

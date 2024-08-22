@@ -5,12 +5,15 @@ import cookie from "cookie";
 import { verifyJWT } from "@/utils/middleware";
 import { GetServerSideProps } from "next";
 import Layout from "../layout/layout";
-import { Student } from "@/utils/data_interface";
+import { Evening, Student } from "@/utils/data_interface";
+import { useGlobalContext } from "@/context/GlobalContext";
+import Spinner from "@/components/spinner";
 
 const Students = (props: any) => {
-  // console.log(props.students);
+  const { isLoading } = useGlobalContext();
 
   const students: Student[] = props.students;
+  const evenings: Evening[] = props.evenings;
 
   //  ! Checking the user type
   const userDetail = props.user;
@@ -30,7 +33,7 @@ const Students = (props: any) => {
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
-        <DashboardNav />
+        <DashboardNav evening_data={evenings} />
         {students.length === 0 ? (
           no_student
         ) : (
@@ -107,13 +110,25 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     });
 
+    // Fetch user Evening data from the API
+    const evening_Response = await fetch(
+      process.env.BACKEND_URL + "/evenings/planned-by/" + user_id,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     const data = await response.json();
     const student_Data = await student_Response.json();
+    const evening_Data = await evening_Response.json();
     // console.log("API Response:", data);
 
     // Return user data as props
     return {
-      props: { user: data, students: student_Data }, // Adjust this depending on your API response structure
+      props: { user: data, students: student_Data, evenings: evening_Data }, // Adjust this depending on your API response structure
     };
   } catch (error) {
     console.error("Error fetching user data:", error);

@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
 import cookie from "cookie";
+import { useGlobalContext } from "@/context/GlobalContext";
+import Spinner from "@/components/spinner";
 
 //!  Fix the server side prop
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
@@ -34,6 +36,8 @@ export default function LoginPage() {
   const [codeemail, setCodeEmail] = useState(false);
 
   const route = useRouter();
+  const { isLoading } = useGlobalContext();
+
 
   // Using local storage
   const StoreData = (email: any, user_id: any, firstname: any, role: any) => {
@@ -172,6 +176,8 @@ export default function LoginPage() {
   if (codeemail) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        {isLoading && <Spinner />}
+
         <div className="p-8 bg-white shadow-lg rounded-lg max-w-sm w-full">
           <h2 className="text-2xl font-bold mb-6 text-primary_light ">
             Verify OTP
@@ -220,6 +226,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        {isLoading && <Spinner />}
+
       <div>
         <div className="flex justify-between text-primary_dark font-bold bg-white rounded-lg border-b-2 border-primary_dark ">
           {/* <div

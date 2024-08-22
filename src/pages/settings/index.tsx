@@ -4,14 +4,16 @@ import cookie from "cookie";
 import { verifyJWT } from "@/utils/middleware";
 import { GetServerSideProps } from "next";
 import Layout from "../layout/layout";
+import { Evening } from "@/utils/data_interface";
 
-const Settings = (props : any) => {
+const Settings = (props: any) => {
+  const evenings: Evening[] = props.evenings;
+
   return (
     <Layout user_data={props}>
-
-    <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
-      <DashboardNav />
-    </div>
+      <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
+        <DashboardNav evening_data={evenings} />
+      </div>
     </Layout>
   );
 };
@@ -61,12 +63,25 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       }
     );
 
+    // Fetch user Evening data from the API
+    const evening_Response = await fetch(
+      process.env.BACKEND_URL + "/evenings/planned-by/" + user_id,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     const data = await response.json();
+    const evening_Data = await evening_Response.json();
+
     // console.log("API Response:", data);
 
     // Return user data as props
     return {
-      props: { user: data }, // Adjust this depending on your API response structure
+      props: { user: data, evenings: evening_Data }, // Adjust this depending on your API response structure
     };
   } catch (error) {
     console.error("Error fetching user data:", error);

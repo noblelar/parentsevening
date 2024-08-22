@@ -7,13 +7,11 @@ import { GetServerSideProps } from "next";
 import Layout from "../layout/layout";
 
 import { Evening } from "@/utils/data_interface";
+import { useGlobalContext } from "@/context/GlobalContext";
+import Spinner from "@/components/spinner";
 
 const Evenings = (props: any) => {
   const evenings: Evening[] = props.evenings;
-  // console.log(evenings);
-
-  // const first_name = props.user.Teacher.first_name;
-  // console.log(first_name);
 
   //  ! Checking the user type
   const userDetail = props.user;
@@ -33,7 +31,7 @@ const Evenings = (props: any) => {
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
-        <DashboardNav />
+        <DashboardNav evening_data={evenings} />
         {evenings.length === 0 ? (
           no_evening
         ) : (
@@ -90,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   // console.log(user_id);
 
   try {
-    // Fetch user data from the API
+    // Fetch user User data from the API
     const response = await fetch(
       process.env.BACKEND_URL + "/user-accounts/userdata/",
       {
@@ -102,7 +100,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       }
     );
 
-    // Fetch user data from the API
+    // Fetch user Evening data from the API
     const evening_Response = await fetch(
       process.env.BACKEND_URL + "/evenings/planned-by/" + user_id,
       {

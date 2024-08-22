@@ -5,6 +5,8 @@ import Sidebar from "./sidebar";
 import { useRouter } from "next/router";
 import LoginPage from "../login";
 import Dashboard from "../dashboard";
+import { useGlobalContext } from "@/context/GlobalContext";
+import Spinner from "@/components/spinner";
 
 const Layout = ({
   children,
@@ -17,6 +19,8 @@ const Layout = ({
   console.log(route);
   // console.log(user_data);
 
+  const { isLoading } = useGlobalContext();
+
   const currentRoute = route.asPath;
 
   const landingPage =
@@ -26,6 +30,8 @@ const Layout = ({
     // if (cookie && cookie.access_token) {
     return (
       <>
+        {isLoading && <Spinner />}
+
         <LoginPage />
       </>
     );
@@ -36,6 +42,8 @@ const Layout = ({
       <Header user={user_data} />
       <main>
         <div className=" flex justify-between">
+          {isLoading && <Spinner />}
+
           <Sidebar user={user_data} />
           {children}
           {landingPage ? landingPage : null}

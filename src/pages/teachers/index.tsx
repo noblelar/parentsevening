@@ -6,13 +6,14 @@ import Layout from "../layout/layout";
 import { GetServerSideProps } from "next";
 import { verifyJWT } from "@/utils/middleware";
 import cookie from "cookie";
-import { Teacher } from "@/utils/data_interface";
+import { Evening, Teacher } from "@/utils/data_interface";
+import { useGlobalContext } from "@/context/GlobalContext";
+import Spinner from "@/components/spinner";
 
 const Teachers = (props: any) => {
-  // console.log(props.teachers);
   const teachers: Teacher[] = props.teachers;
-
-  console.log(teachers);
+  const { isLoading } = useGlobalContext();
+  const evenings: Evening[] = props.evenings;
 
   //  ! Checking the user type
   const userDetail = props.user;
@@ -32,7 +33,7 @@ const Teachers = (props: any) => {
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
-        <DashboardNav />
+        <DashboardNav evening_data={evenings} />
         {teachers.length === 0 ? (
           no_teacher
         ) : (
@@ -102,7 +103,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     );
 
     // Fetch user data from the API
-    const evening_Response = await fetch(
+    const teacher_Response = await fetch(
       process.env.BACKEND_URL + "/user-accounts/teachers",
       {
         method: "GET",
@@ -112,13 +113,25 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       }
     );
 
+    // Fetch user Evening data from the API
+    const evening_Response = await fetch(
+      process.env.BACKEND_URL + "/evenings/planned-by/" + user_id,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     const data = await response.json();
-    const teachers_Data = await evening_Response.json();
+    const teachers_Data = await teacher_Response.json();
+    const evening_Data = await evening_Response.json();
     // console.log("API Response:", data);
 
     // Return user data as props
     return {
-      props: { user: data, teachers: teachers_Data },
+      props: { user: data, teachers: teachers_Data, evenings: evening_Data },
     };
   } catch (error) {
     console.error("Error fetching user data:", error);
