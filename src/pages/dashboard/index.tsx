@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React, { useEffect } from "react";
 import Revenue from "./dbitems/participation";
 import OrderTime from "./dbitems/feedback";
 import Rating from "./dbitems/rating";
@@ -14,8 +15,15 @@ import { useGlobalContext } from "@/context/GlobalContext";
 import Spinner from "@/components/spinner";
 
 const Dashboard: React.FC<IBaseLayout> = (props: any) => {
-  const { isLoading } = useGlobalContext();
+  const { isLoading, globalEvening, setGlobalEvening } = useGlobalContext();
   const evenings: Evening[] = props.evenings;
+
+  // Ensure the selected option persists across page navigation
+  // useEffect(() => {
+  //   if (globalEvening) {
+  //     setGlobalEvening(globalEvening);
+  //   }
+  // }, [globalEvening, setGlobalEvening]);
 
   return (
     <Layout user_data={props}>
@@ -39,6 +47,7 @@ export default Dashboard;
 
 // ! Getting User Data
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  
   function getUserId() {
     if (req.headers.cookie) {
       let cookies = cookie.parse(req.headers.cookie);
@@ -67,6 +76,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         return user_id;
       }
     }
+    
   }
 
   const user_id = getUserId();

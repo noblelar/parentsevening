@@ -13,20 +13,23 @@ import { Evening } from "@/utils/data_interface";
 import { GetDate } from "@/utils/auxiliary";
 // import { cookies } from "next/headers";
 
-const navlist = dashboardNavList;
+// const navlist = dashboardNavList;
 
 const DashboardNav = (evening_data: any) => {
   const cur_route = useRouter();
 
   const eve_data: Evening[] = evening_data.evening_data;
   console.log(eve_data);
-
+  const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { globalEvening, setGlobalEvening } = useGlobalContext();
 
+  // Ensure the component only renders after it's mounted on the client
+  useEffect(() => {
+    setIsMounted(true); // Component has mounted
+  }, []);
   // const { globalValue, setGlobalValue } = useGlobalContext();
   // Ensure the selected option persists across page navigation
-
   useEffect(() => {
     if (globalEvening) {
       setGlobalEvening(globalEvening);
@@ -46,6 +49,17 @@ const DashboardNav = (evening_data: any) => {
     return check;
   };
 
+  // Ensure the selected option persists across page navigation
+  useEffect(() => {
+    if (globalEvening) {
+      setGlobalEvening(globalEvening);
+    }
+  }, [globalEvening, setGlobalEvening]);
+
+  if (!isMounted) {
+    return null; // Don't render the component on the server
+  }
+  console.log(globalEvening);
   return (
     <div className=" w-full bg-primary_dark sticky top-[0px] z-20 ">
       <div className=" container m-auto flex justify-between p-2 space-x-2 ">
@@ -54,10 +68,19 @@ const DashboardNav = (evening_data: any) => {
           <select
             className="text-white bg-transparent border border-white p-2 rounded"
             // ! Onchange of this evening paramenter I need to set a global balue that will help fetch data for a particular evening  evenig
+            // Todo: Done
+            // value={globalEvening || "all"}
             onChange={(e) => {
               setGlobalEvening(e.target.value);
             }}
           >
+            <option
+              value="all"
+              className="text-black"
+              selected={checkId("all")}
+            >
+              All
+            </option>
             {eve_data.map((nav_item, id) => (
               <option
                 key={id}
@@ -71,8 +94,8 @@ const DashboardNav = (evening_data: any) => {
               </option>
             ))}
           </select>
-          <p className=" text-white ">{globalEvening}</p>
         </div>
+        <p className=" text-white ">{globalEvening ? globalEvening : null}</p>
 
         <div className="flex space-x-4 items-center">
           {/* User Icon */}

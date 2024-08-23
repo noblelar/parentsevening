@@ -26,6 +26,8 @@ const Layout = ({
   const landingPage =
     currentRoute == "/" ? <Dashboard child={undefined} title={""} /> : null;
 
+    console.log(landingPage)
+
   if (currentRoute == "/login" || currentRoute == "/login/verify") {
     // if (cookie && cookie.access_token) {
     return (

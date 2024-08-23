@@ -83,7 +83,7 @@ const Sidebar = (user: any) => {
             <Link href={"/dashboard"}>
               <div
                 className={`flex items-center space-x-3 py-3 cursor-pointer hover:bg-[#e0e0e0] ${
-                  currentRoute == "/dashboard" ? "bg-[#e0e0e0]" : ""
+                  currentRoute == "/dashboard" || currentRoute == "/" ? "bg-[#e0e0e0]" : ""
                 } rounded-lg text-primary_dark ${!isCollapsed ? "pl-3 " : ""} `}
               >
                 <FaTachometerAlt
