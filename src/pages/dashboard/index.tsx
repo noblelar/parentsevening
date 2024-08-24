@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 import Revenue from "./dbitems/participation";
 import OrderTime from "./dbitems/feedback";
@@ -15,15 +15,25 @@ import { useGlobalContext } from "@/context/GlobalContext";
 import Spinner from "@/components/spinner";
 
 const Dashboard: React.FC<IBaseLayout> = (props: any) => {
-  const { isLoading, globalEvening, setGlobalEvening } = useGlobalContext();
+  const {
+    isLoading,
+    globalEvening,
+    setGlobalEvening,
+    globalValue,
+    setGlobalValue,
+  } = useGlobalContext();
   const evenings: Evening[] = props.evenings;
+  const user_prop: string = props.user.user_id;
 
+  useEffect(() => {
+    setGlobalValue(user_prop);
+  }, []);
 
-
+  console.log(user_prop);
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8 ">
-        <DashboardNav evening_data={evenings} />
+        <DashboardNav evening_data={evenings} user_prop={user_prop} />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Revenue />
           <OrderTime />
@@ -42,7 +52,6 @@ export default Dashboard;
 
 // ! Getting User Data
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  
   function getUserId() {
     if (req.headers.cookie) {
       let cookies = cookie.parse(req.headers.cookie);
@@ -71,7 +80,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         return user_id;
       }
     }
-    
   }
 
   const user_id = getUserId();

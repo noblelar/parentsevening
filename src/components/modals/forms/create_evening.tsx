@@ -1,20 +1,30 @@
+import { useGlobalContext } from "@/context/GlobalContext";
+import Link from "next/link";
 import React, { useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
 interface Menuprops {
-  //   isOpen: boolean;
   onClose: () => void;
 }
 
 const CreateEvening: React.FC<Menuprops> = ({ onClose }) => {
+  const { globalValue, setGlobalEvening } = useGlobalContext();
+  const [submitSuccess, setSubmitSuccess] = useState<Boolean>(false);
+  const [eve_recieved, setEveningRecieved] = useState<number | null>(null);
+
   const [yearGroup, setYearGroup] = useState("");
   const [date, setDate] = useState("");
   const [term, setTerm] = useState("");
   const [scheduleFor, setScheduleFor] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [plannedBy, setPlannedBy] = useState("");
   const [timePerMeeting, setTimePerMeeting] = useState<number>(5); // Default 5 minutes
 
+  const [plannedBy] = useState(globalValue); // Unset state not needed for plannedBy
+
+  console.log(plannedBy);
+
+  // Handling submit
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     const eveningData = {
@@ -22,120 +32,186 @@ const CreateEvening: React.FC<Menuprops> = ({ onClose }) => {
       date: new Date(date),
       term,
       scheduleFor,
-      startTime: new Date(startTime),
-      endTime: new Date(endTime),
+      startTime: new Date(`${date}T${startTime}`),
+      endTime: new Date(`${date}T${endTime}`),
       plannedBy: parseInt(plannedBy),
-      timePerMeeting: timePerMeeting,
+      timePerMeeting,
     };
 
     // Submit these details to your backend API
     try {
-      const response = await fetch("/api/create-evening", {
+      const response = await fetch("/api/create/evening/route", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(eveningData),
       });
+
       const responseData = await response.json();
       console.log("Server Response:", responseData);
+
+      if (response.ok) {
+        setEveningRecieved(responseData.evening.evening_id);
+        setSubmitSuccess(true);
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
+  const setEve = () => {
+    setGlobalEvening(eve_recieved);
+  };
+
+  if (submitSuccess) {
+    return (
+      <div className="flex justify-between">
+        <div>Evening Created Successfully</div>
+
+        <Link
+          href={"/teachers"}
+          onClick={setEve}
+          className="flex space-x-2 text-primary_light font-bold cursor-pointer rounded-md bg-white border-2 p-2 border-green-700"
+        >
+          <FaPlus size={24} /> <span> Add Teachers </span>
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <form className="p-6 bg-white rounded shadow-lg">
+    <form className="p-6 bg-white rounded-lg shadow-lg" onSubmit={handleSubmit}>
       <div className="mb-4">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="yearGroup"
         >
-          Year Group
+          <span className="text-red-500">*</span> Year Group
         </label>
         <input
           id="yearGroup"
           type="number"
           placeholder="Enter year group"
+          value={yearGroup}
           onChange={(e) => setYearGroup(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+          required
+        />
       </div>
+
+      <div className="flex space-x-8">
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="date"
+          >
+            <span className="text-red-500">*</span> Date
+          </label>
+          <input
+            id="date"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="term"
+          >
+            <span className="text-red-500">*</span> Term
+          </label>
+          <select
+            id="term"
+            value={term}
+            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            onChange={(e) => setTerm(e.target.value)}
+            required
+          >
+            <option value="">Select Term</option>
+            <option value="Fall">Fall</option>
+            <option value="Winter">Winter</option>
+            <option value="Summer">Summer</option>
+            <option value="Autumn">Autumn</option>
+          </select>
+        </div>
+      </div>
+
       <div className="mb-4">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="date"
-          >
-          Date
+          htmlFor="scheduleFor"
+        >
+          Schedule For
         </label>
         <input
-          id="date"
-          type="date"
-          onChange={(e) => setDate(e.target.value)}
+          id="scheduleFor"
+          type="text"
+          placeholder="Enter what the evening is scheduled for"
+          value={scheduleFor}
+          onChange={(e) => setScheduleFor(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="term"
-        >
-          Term
-        </label>
-        <select
-          id="term"
-          className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          onChange={(e) => setTerm(e.target.value)}
+
+      <div className="flex space-x-8">
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="startTime"
           >
-          <option value="Fall">Fall</option>
-          <option value="Winter">Winter</option>
-          <option value="Summer">Summer</option>
-          <option value="Autumn">Autumn</option>
-        </select>
-      </div>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="startTime"
-          >
-          Start Time
-        </label>
-        <input
-          id="startTime"
-          type="datetime-local"
-          onChange={(e) => setStartTime(e.target.value)}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            <span className="text-red-500">*</span> Start Time
+          </label>
+          <input
+            id="startTime"
+            type="time"
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
           />
+        </div>
+
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="endTime"
+          >
+            <span className="text-red-500">*</span> End Time
+          </label>
+          <input
+            id="endTime"
+            type="time"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
       </div>
+
       <div className="mb-4">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="endTime"
-          >
-          End Time
-        </label>
-        <input
-          id="endTime"
-          type="datetime-local"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          onChange={(e) => setEndTime(e.target.value)}
-          />
-      </div>
-      <input type="hidden" name="planner" value={1} />
-      {/* <div className="mb-6">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="plannedBy"
+          htmlFor="timePerMeeting"
         >
-          Planned By (Staff ID)
+          Time Per Meeting (in minutes)
         </label>
         <input
-          id="plannedBy"
+          id="timePerMeeting"
           type="number"
-          placeholder="Enter staff ID"
+          placeholder="Enter time per meeting"
+          value={timePerMeeting}
+          onChange={(e) => setTimePerMeeting(parseInt(e.target.value))}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          min="1"
         />
-      </div> */}
+      </div>
+
       <div className="flex items-center justify-between">
         <button
           type="submit"

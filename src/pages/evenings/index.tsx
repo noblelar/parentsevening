@@ -1,5 +1,5 @@
 import DashboardNav from "@/components/ui/dashboardnav";
-import React from "react";
+import React, { useEffect } from "react";
 import EveningTable from "./eveningstable";
 import cookie from "cookie";
 import { verifyJWT } from "@/utils/middleware";
@@ -12,6 +12,13 @@ import Spinner from "@/components/spinner";
 
 const Evenings = (props: any) => {
   const evenings: Evening[] = props.evenings;
+  const { setGlobalValue } = useGlobalContext();
+
+  const user_prop: string = props.user.user_id;
+
+  useEffect(() => {
+    setGlobalValue(user_prop);
+  }, []);
 
   //  ! Checking the user type
   const userDetail = props.user;

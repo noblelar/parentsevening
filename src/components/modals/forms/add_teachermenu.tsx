@@ -5,7 +5,7 @@ interface Menuprops {
   onClose: () => void;
 }
 
-const Add_teachermenu: React.FC<Menuprops> = ({ onClose }) => {
+const AddTeacherMenu: React.FC<Menuprops> = ({ onClose }) => {
   return (
     <form>
       <div className="mb-4">
@@ -94,4 +94,4 @@ const Add_teachermenu: React.FC<Menuprops> = ({ onClose }) => {
   );
 };
 
-export default Add_teachermenu;
+export default AddTeacherMenu;

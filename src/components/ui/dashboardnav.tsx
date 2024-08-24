@@ -19,6 +19,7 @@ import { VscDebugStart } from "react-icons/vsc";
 import { useGlobalContext } from "@/context/GlobalContext";
 import { Evening } from "@/utils/data_interface";
 import { GetDate } from "@/utils/auxiliary";
+import AddTeacherMenu from "../modals/forms/add_teachermenu";
 // import { cookies } from "next/headers";
 
 // const navlist = dashboardNavList;
@@ -27,18 +28,19 @@ const DashboardNav = (evening_data: any) => {
   const cur_route = useRouter();
 
   const eve_data: Evening[] = evening_data.evening_data;
-  console.log(eve_data);
+  // console.log(eve_data);
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formType, setFormType] = useState<string>("");
   const [title, setFormTitle] = useState<string>("");
-  const { globalEvening, setGlobalEvening } = useGlobalContext();
+  const { globalEvening, setGlobalEvening, globalValue } = useGlobalContext();
 
   // Ensure the component only renders after it's mounted on the client
   useEffect(() => {
     setIsMounted(true); // Component has mounted
   }, []);
   // const { globalValue, setGlobalValue } = useGlobalContext();
+
   // Ensure the selected option persists across page navigation
   useEffect(() => {
     if (globalEvening) {
@@ -61,12 +63,7 @@ const DashboardNav = (evening_data: any) => {
     return check;
   };
 
-  // Ensure the selected option persists across page navigation
-  useEffect(() => {
-    if (globalEvening) {
-      setGlobalEvening(globalEvening);
-    }
-  }, [globalEvening, setGlobalEvening]);
+
 
   if (!isMounted) {
     return null; // Don't render the component on the server
@@ -176,6 +173,9 @@ const DashboardNav = (evening_data: any) => {
         <div>
           {formType === "evening_form" && (
             <CreateEvening onClose={closeModal} />
+          )}
+          {formType === "teacher_form" && (
+            <AddTeacherMenu onClose={closeModal} />
           )}
         </div>
       </Modal>
