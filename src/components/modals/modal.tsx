@@ -22,7 +22,7 @@ const Modal: React.FC<ModalProps> = ({
           <h2 className="text-xl font-bold">{formTitle}</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className=" text-[2.4rem] text-gray-500 hover:text-gray-700"
           >
             &times;
           </button>

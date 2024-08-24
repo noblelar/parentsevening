@@ -18,12 +18,7 @@ const Dashboard: React.FC<IBaseLayout> = (props: any) => {
   const { isLoading, globalEvening, setGlobalEvening } = useGlobalContext();
   const evenings: Evening[] = props.evenings;
 
-  // Ensure the selected option persists across page navigation
-  // useEffect(() => {
-  //   if (globalEvening) {
-  //     setGlobalEvening(globalEvening);
-  //   }
-  // }, [globalEvening, setGlobalEvening]);
+
 
   return (
     <Layout user_data={props}>

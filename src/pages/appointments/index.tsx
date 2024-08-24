@@ -10,16 +10,23 @@ import Layout from "../layout/layout";
 import { useGlobalContext } from "@/context/GlobalContext";
 import Spinner from "@/components/spinner";
 import { Evening } from "@/utils/data_interface";
+import AppointmentTable from "./appointments_table";
 
 const Appointments: React.FC = (props: any) => {
-  const { isLoading } = useGlobalContext();
+  const { isLoading, globalEvening } = useGlobalContext();
   const evenings: Evening[] = props.evenings;
+  const appointments = props.appointments;
 
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
         <DashboardNav evening_data={evenings} />
-        <AppointmentDashboard />
+
+        {globalEvening == "all" ? (
+          <AppointmentTable appointments={appointments} />
+        ) : (
+          <AppointmentDashboard />
+        )}
       </div>
     </Layout>
   );
@@ -81,13 +88,28 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       }
     );
 
+    const appointment_Response = await fetch(
+      process.env.BACKEND_URL + "/appointments",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     const data = await response.json();
     const evening_Data = await evening_Response.json();
-    // console.log("API Response:", data);
+    const appointment_Data = await appointment_Response.json();
+    console.log("API Response:", appointment_Data);
 
     // Return user data as props
     return {
-      props: { user: data, evenings: evening_Data }, // Adjust this depending on your API response structure
+      props: {
+        user: data,
+        evenings: evening_Data,
+        appointments: appointment_Data,
+      }, // Adjust this depending on your API response structure
     };
   } catch (error) {
     console.error("Error fetching user data:", error);

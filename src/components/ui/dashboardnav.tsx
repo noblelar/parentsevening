@@ -1,6 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Button from "./button";
+import {
+  CalendarIcon,
+  PlusIcon,
+  SaveIcon,
+  StartIcon,
+  UserAddIcon,
+} from "./buttons";
 import { dashboardNavList } from "@/utils/datasamples";
 import { useRouter } from "next/router";
 import Modal from "../modals/modal";
@@ -8,6 +14,8 @@ import Add_teachermenu from "../modals/forms/add_teachermenu";
 import CreateEvening from "../modals/forms/create_evening";
 import { FaPlus, FaUser } from "react-icons/fa";
 import { TiUserAdd } from "react-icons/ti";
+import { RiCalendar2Line } from "react-icons/ri";
+import { VscDebugStart } from "react-icons/vsc";
 import { useGlobalContext } from "@/context/GlobalContext";
 import { Evening } from "@/utils/data_interface";
 import { GetDate } from "@/utils/auxiliary";
@@ -22,6 +30,8 @@ const DashboardNav = (evening_data: any) => {
   console.log(eve_data);
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formType, setFormType] = useState<string>("");
+  const [title, setFormTitle] = useState<string>("");
   const { globalEvening, setGlobalEvening } = useGlobalContext();
 
   // Ensure the component only renders after it's mounted on the client
@@ -36,7 +46,9 @@ const DashboardNav = (evening_data: any) => {
     }
   }, [globalEvening, setGlobalEvening]);
 
-  const openModal = () => {
+  const openModal = (form: string, title: string) => {
+    setFormType(form);
+    setFormTitle(title);
     setIsModalOpen(true);
   };
 
@@ -98,26 +110,74 @@ const DashboardNav = (evening_data: any) => {
         <p className=" text-white ">{globalEvening ? globalEvening : null}</p>
 
         <div className="flex space-x-4 items-center">
-          {/* User Icon */}
-          {/* Plus Icon for adding items */}
-          <FaPlus
-            className="text-white cursor-pointer"
-            size={24}
-            onClick={openModal}
-          />
-          <TiUserAdd
-            className="text-white cursor-pointer"
-            size={28}
-            onClick={openModal}
-          />
+          {/* Dashboard Navigations */}
+          {cur_route.asPath == "/dashboard" ? (
+            <StartIcon
+              onClick={() => openModal("evening_form", "Create New Evening")}
+              tooltip={"Start New Evening"}
+            />
+          ) : null}
+
+          {/* Appointments Navigations */}
+          {cur_route.asPath == "/appointments" ? (
+            <CalendarIcon
+              onClick={() => openModal("generate_booking", "Booking")}
+              tooltip={"Generate Optimal Booking"}
+            />
+          ) : null}
+          {/* Teachers Navigations */}
+          {cur_route.asPath == "/teachers" ? (
+            <PlusIcon
+              onClick={() => openModal("add_teacher", "Add Teachers")}
+              tooltip={"Add Teacher to Evening"}
+            />
+          ) : null}
+
+          {cur_route.asPath == "/teachers" ? (
+            <UserAddIcon
+              onClick={() => openModal("teacher_form", "Add New Teacher")}
+              tooltip={"Add New Teacher"}
+            />
+          ) : null}
+
+          {/* Students Navigations */}
+          {cur_route.asPath == "/students" ? (
+            <UserAddIcon
+              onClick={() => openModal("student_form", "Add New Evening")}
+              tooltip={"Add New Student"}
+            />
+          ) : null}
+          {/* Parents Navigations */}
+          {cur_route.asPath == "/parents" ? (
+            <UserAddIcon
+              onClick={() => openModal("parent_form", "Add New Parent")}
+              tooltip={"Add New Parent"}
+            />
+          ) : null}
+
+          {/* Evenings Navigations */}
+          {cur_route.asPath == "/evenings" ? (
+            <PlusIcon
+              onClick={() => openModal("evening_form", "Create New Evening")}
+              tooltip={"Create New Evening"}
+            />
+          ) : null}
+
+          {/* Settings Navigations */}
+          {cur_route.asPath == "/settings" ? (
+            <SaveIcon
+              onClick={() => openModal("save_evening", "Save Evening")}
+              tooltip={"Save Settings"}
+            />
+          ) : null}
         </div>
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        formTitle={"Create New Evening"}
-      >
-        <CreateEvening onClose={closeModal} />
+      <Modal isOpen={isModalOpen} onClose={closeModal} formTitle={title}>
+        <div>
+          {formType === "evening_form" && (
+            <CreateEvening onClose={closeModal} />
+          )}
+        </div>
       </Modal>
     </div>
   );
