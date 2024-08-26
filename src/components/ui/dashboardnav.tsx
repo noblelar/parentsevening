@@ -63,8 +63,6 @@ const DashboardNav = (evening_data: any) => {
     return check;
   };
 
-
-
   if (!isMounted) {
     return null; // Don't render the component on the server
   }
