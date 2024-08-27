@@ -27,13 +27,18 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
   const eve_data: Evening[] = evening_data.evening_data;
   // const teach_data = teacher_data.teacher_data;
 
-  console.log(teach_data[0]);
+  // console.log(teach_data);
   // console.log(eve_data);
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formType, setFormType] = useState<string>("");
   const [title, setFormTitle] = useState<string>("");
-  const { globalEvening, setGlobalEvening, globalValue } = useGlobalContext();
+  const {
+    globalEvening,
+    setGlobalEvening,
+    setGlobalEveningTeachers,
+    setGlobalTeachers,
+  } = useGlobalContext();
 
   // Ensure the component only renders after it's mounted on the client
   useEffect(() => {
@@ -47,6 +52,11 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
       setGlobalEvening(globalEvening);
     }
   }, [globalEvening, setGlobalEvening]);
+
+  useEffect(() => {
+    setGlobalTeachers(teach_data);
+    // console.log(teach_data)
+  }, [globalEvening]);
 
   const openModal = (form: string, title: string) => {
     setFormType(form);
@@ -64,10 +74,12 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
   };
 
   const handleOnChange = async (event: any) => {
-    setGlobalEvening(event.target.value);
+    const selectedEvening = event.target.value;
+    setGlobalEvening(selectedEvening);
 
     try {
-      const evening_Response = await fetch("/api/fetch_teacher_data/route?evening=" + globalEvening,
+      const evening_Response = await fetch(
+        `/api/fetch_teacher_data/route?evening=${selectedEvening}`,
         {
           method: "GET",
           headers: {
@@ -78,9 +90,11 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
 
       const evenings = await evening_Response.json();
 
-      console.log(evenings);
+      if (evening_Response.ok) {
+        setGlobalEveningTeachers(evenings.teacher_eveing);
+      }
     } catch (err) {
-      console.log({ error: err });
+      console.error("Error fetching teachers", err);
     }
   };
 

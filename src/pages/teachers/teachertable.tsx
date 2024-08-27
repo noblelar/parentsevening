@@ -1,6 +1,8 @@
+import { useGlobalContext } from "@/context/GlobalContext";
 import { Teacher } from "@/utils/data_interface";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import { IoRemoveCircle } from "react-icons/io5";
 
 type SortConfig = {
   key: keyof Teacher;
@@ -13,10 +15,25 @@ interface TeacherTableProps {
 
 const TeacherTable: React.FC<TeacherTableProps> = ({ teachers }) => {
   const [selectedTeacher, setSelectedTeacher] = useState<number | null>(null);
+  const { globalEveningTeachers, globalEvening } = useGlobalContext();
+
   const [filters, setFilters] = useState({
     search: "",
   });
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
+  const [theteachers, setTeachers] = useState<Teacher[]>([]);
+
+  // Use globalEveningTeachers if available, fallback to the passed in teachers
+  const teacherDataCheck =
+    globalEveningTeachers == undefined || globalEvening == "all";
+
+  useEffect(() => {
+    if (teacherDataCheck) {
+      setTeachers(teachers);
+    } else {
+      setTeachers(globalEveningTeachers);
+    }
+  }, [globalEveningTeachers, teachers, teacherDataCheck]);
 
   // Search input handler
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,9 +53,37 @@ const TeacherTable: React.FC<TeacherTableProps> = ({ teachers }) => {
     setSortConfig({ key, direction });
   };
 
+  // Function to handle removing a teacher
+  const handleRemoveTeacher = async (teacher_id: number) => {
+    try {
+      const evening_Response = await fetch(`/api/delete/teacher_evening`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          teacher_id: teacher_id,
+          evening_id: globalEvening,
+        }),
+      });
+
+      const response = await evening_Response.json();
+
+      if (evening_Response.ok) {
+        // Remove the teacher from the theteachers array
+        setTeachers((prevTeachers) =>
+          prevTeachers.filter((teacher) => teacher.staff_id !== teacher_id)
+        );
+        console.log("Teacher removed successfully");
+      }
+    } catch (err) {
+      console.error("Error removing teacher", err);
+    }
+  };
+
   // Sorting logic
   const sortedTeachers = React.useMemo(() => {
-    let sortableTeachers = [...teachers];
+    let sortableTeachers = [...theteachers];
     if (sortConfig !== null) {
       sortableTeachers.sort((a, b) => {
         const aValue = a[sortConfig.key] || ""; // Fallback to empty string if undefined
@@ -57,7 +102,7 @@ const TeacherTable: React.FC<TeacherTableProps> = ({ teachers }) => {
       });
     }
     return sortableTeachers;
-  }, [teachers, sortConfig]);
+  }, [theteachers, sortConfig]);
 
   // Filtering logic for search
   const filteredTeachers = sortedTeachers.filter((teacher) => {
@@ -118,6 +163,7 @@ const TeacherTable: React.FC<TeacherTableProps> = ({ teachers }) => {
                   </div>
                 </th>
               ))}
+              {!teacherDataCheck && <th className="px-4 py-2 border-b"></th>}
             </tr>
           </thead>
           <tbody>
@@ -150,6 +196,14 @@ const TeacherTable: React.FC<TeacherTableProps> = ({ teachers }) => {
                   <td className="px-4 py-2 border-b">{subject}</td>
                   <td className="px-4 py-2 border-b">{contact}</td>
                   <td className="px-4 py-2 border-b">{availability}</td>
+                  {!teacherDataCheck && (
+                    <td
+                      className="px-4 py-2 border-b m-auto flex flex-row justify-center"
+                      onClick={() => handleRemoveTeacher(id)}
+                    >
+                      <IoRemoveCircle size={25} color="brown" />
+                    </td>
+                  )}
                 </tr>
               );
             })}

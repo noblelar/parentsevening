@@ -1,13 +1,6 @@
 import { useGlobalContext } from "@/context/GlobalContext";
 import { Teacher } from "@/utils/data_interface";
-import { evenings } from "@/utils/datasamples";
 import React, { useEffect, useState } from "react";
-
-// interface Teacher {
-//   staff_id: number;
-//   first_name: string;
-//   last_name: string;
-// }
 
 const getTeacherIds = (teachers: Teacher[]) => {
   let teacherIds: number[] = [];
@@ -18,7 +11,6 @@ const getTeacherIds = (teachers: Teacher[]) => {
 };
 
 interface MultiSelectTeacherProps {
-  //   teachers: Teacher[]; // List of available teachers
   onClose: () => void;
 }
 
@@ -28,12 +20,11 @@ const MultiSelectTeacher: React.FC<MultiSelectTeacherProps> = ({ onClose }) => {
   const [teachers, setTeacher] = useState<Teacher[]>([]);
   const [submitSuccess, setSubmitSuccess] = useState<Boolean>(false);
 
-  const { globalTeachers, globalEvening } = useGlobalContext();
+  const { globalTeachers, globalEvening, setGlobalEveningTeachers } = useGlobalContext();
+
   useEffect(() => {
     setTeacher(globalTeachers);
   }, [globalTeachers]);
-
-  console.log(selectedTeachers);
 
   // Function to add a teacher to the selected list
   const handleSelectTeacher = (teacher: Teacher) => {
@@ -50,11 +41,11 @@ const MultiSelectTeacher: React.FC<MultiSelectTeacherProps> = ({ onClose }) => {
   };
 
   // Filter the list of teachers based on the search input
-  const filteredTeachers = teachers.filter((teacher) =>
+  const filteredTeachers = teachers?.filter((teacher) =>
     `${teacher.first_name} ${teacher.last_name}`
       .toLowerCase()
       .includes(teacherSearch.toLowerCase())
-  );
+  ) || []; // Add fallback to ensure teachers is always defined
 
   const handleAddTeachers = async (event: any) => {
     event.preventDefault();
@@ -74,9 +65,30 @@ const MultiSelectTeacher: React.FC<MultiSelectTeacherProps> = ({ onClose }) => {
 
       if (response.ok) {
         setSubmitSuccess(true);
+        // After successful submission, fetch updated teacher list
+        fetchUpdatedTeachers();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+    }
+  };
+
+  const fetchUpdatedTeachers = async () => {
+    try {
+      const response = await fetch(`/api/fetch_teacher_data/route?evening=${globalEvening}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      
+      const updatedTeachers = await response.json();
+      if (response.ok) {
+        // Update global state with the new teacher list
+        setGlobalEveningTeachers(updatedTeachers.teacher_eveing);
+      }
+    } catch (error) {
+      console.error("Error fetching updated teachers:", error);
     }
   };
 
@@ -94,6 +106,10 @@ const MultiSelectTeacher: React.FC<MultiSelectTeacherProps> = ({ onClose }) => {
 
   if (submitSuccess) {
     return <div>Teachers Added Successfully!</div>;
+  }
+
+  if (globalEvening == 'all') {
+    return <div> Select or Start an Evening to add teachers </div>
   }
 
   return (

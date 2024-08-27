@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import { useRouter } from "next/router";
+import { Teacher } from "@/utils/data_interface";
 
 // Define the context types
 interface GlobalContextProps {
@@ -7,6 +8,8 @@ interface GlobalContextProps {
   setGlobalValue: React.Dispatch<React.SetStateAction<any>>;
   globalTeachers: any;
   setGlobalTeachers: React.Dispatch<React.SetStateAction<any>>;
+  globalEveningTeachers: any;
+  setGlobalEveningTeachers: React.Dispatch<React.SetStateAction<any>>;
   globalEvening: any;
   setGlobalEvening: React.Dispatch<React.SetStateAction<any>>;
   isLoading: boolean; // To track the loading state
@@ -19,6 +22,7 @@ const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [globalValue, setGlobalValue] = useState<any>();
   const [globalTeachers, setGlobalTeachers] = useState<any>();
+  const [globalEveningTeachers, setGlobalEveningTeachers] = useState<Teacher[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -77,6 +81,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setGlobalValue,
         globalTeachers,
         setGlobalTeachers,
+        globalEveningTeachers,
+        setGlobalEveningTeachers,
         globalEvening,
         setGlobalEvening,
         isLoading,

@@ -45,34 +45,37 @@ export default async function getTeachers(
   if (check) {
     const evening = req.query;
     console.log(evening);
+    if (evening.evening !== "all") {
+      try {
+        const response = await fetch(
+          process.env.BACKEND_URL +
+            "/teacherevening/teachers/" +
+            evening.evening,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-    try {
-      const response = await fetch(
-        process.env.BACKEND_URL + "/teacherevening/teachers/" + evening.evening,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+        const teach_eve = await response.json();
 
-      const teach_eve = await response.json();
+        const tea = getTeacherData(teach_eve.teachers);
 
-      const tea = getTeacherData(teach_eve.teachers)
+        // Mock saving the data (replace with your actual logic)
+        // console.log("Received data:", tea);
 
-      // Mock saving the data (replace with your actual logic)
-      // console.log("Received data:", tea);
-
-      // Return success response
-      res.status(200).json({
-        message: "Teacher successfully Fetch",
-        teacher_eveing: tea,
-        user: check,
-      });
-    } catch (error) {
-      console.error("Error fetching teacher evening:", error);
-      res.status(500).json({ message: "Internal server error", error });
+        // Return success response
+        res.status(200).json({
+          message: "Teacher successfully Fetch",
+          teacher_eveing: tea,
+          user: check,
+        });
+      } catch (error) {
+        console.error("Error fetching teacher evening:", error);
+        res.status(500).json({ message: "Internal server error", error });
+      }
     }
   }
 

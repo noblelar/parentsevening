@@ -31,7 +31,7 @@ const Sidebar = (user: any) => {
   const adminCheck = userDetail.Role.role_type === "admin";
   const teacherCheck = userDetail.Role.role_type === "teacher";
   const parentCheck = userDetail.Role.role_type === "parent";
-  console.log(adminCheck, teacherCheck, parentCheck);
+  // console.log(adminCheck, teacherCheck, parentCheck);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -39,7 +39,7 @@ const Sidebar = (user: any) => {
 
   useEffect(() => {
     isCollapsed ? setIconSize(35) : setIconSize(22);
-    console.log(iconSize);
+    // console.log(iconSize);
   }, [isCollapsed]);
 
   const handleLogOut = async () => {

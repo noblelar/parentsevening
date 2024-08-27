@@ -1,5 +1,5 @@
 import DashboardNav from "@/components/ui/dashboardnav";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TeacherTable from "./teachertable";
 import { teachers } from "@/utils/datasamples";
 import Layout from "../layout/layout";
@@ -11,14 +11,18 @@ import { useGlobalContext } from "@/context/GlobalContext";
 import Spinner from "@/components/spinner";
 
 const Teachers = (props: any) => {
+  // const teachers: Teacher[] = props.teachers;
   const teachers: Teacher[] = props.teachers;
-  const { isLoading, setGlobalTeachers } = useGlobalContext();
+  const { isLoading, setGlobalTeachers, globalEveningTeachers, globalEvening } =
+    useGlobalContext();
   const evenings: Evening[] = props.evenings;
 
-  console.log(props.teachers);
   useEffect(() => {
-    setGlobalTeachers(teachers);
-  }, [teachers]);
+    setGlobalTeachers(teachers)
+  }, [globalEvening, teachers]);
+
+  console.log(globalEveningTeachers);
+  // console.log(props.teachers);
 
   //  ! Checking the user type
   const userDetail = props.user;
@@ -28,10 +32,10 @@ const Teachers = (props: any) => {
 
   const no_teacher = (
     <div>
-      No Evening Planned by or Managed By{" "}
-      {adminCheck
+      No Teacher has been add to this Evening
+      {/* {adminCheck
         ? userDetail.Teacher.first_name
-        : userDetail.Parent.first_name}
+        : userDetail.Parent.first_name} */}
     </div>
   );
 

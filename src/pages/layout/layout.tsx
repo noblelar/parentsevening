@@ -16,7 +16,7 @@ const Layout = ({
   user_data: any;
 }) => {
   const route = useRouter();
-  console.log(route);
+  // console.log(route);
   // console.log(user_data);
 
   const { isLoading } = useGlobalContext();
@@ -26,7 +26,7 @@ const Layout = ({
   const landingPage =
     currentRoute == "/" ? <Dashboard child={undefined} title={""} /> : null;
 
-    console.log(landingPage)
+    // console.log(landingPage)
 
   if (currentRoute == "/login" || currentRoute == "/login/verify") {
     // if (cookie && cookie.access_token) {
