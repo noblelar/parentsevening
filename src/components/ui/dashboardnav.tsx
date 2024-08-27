@@ -7,27 +7,27 @@ import {
   StartIcon,
   UserAddIcon,
 } from "./buttons";
-import { dashboardNavList } from "@/utils/datasamples";
 import { useRouter } from "next/router";
 import Modal from "../modals/modal";
-import Add_teachermenu from "../modals/forms/add_teachermenu";
 import CreateEvening from "../modals/forms/create_evening";
-import { FaPlus, FaUser } from "react-icons/fa";
-import { TiUserAdd } from "react-icons/ti";
-import { RiCalendar2Line } from "react-icons/ri";
-import { VscDebugStart } from "react-icons/vsc";
 import { useGlobalContext } from "@/context/GlobalContext";
-import { Evening } from "@/utils/data_interface";
+import { Evening, Teacher } from "@/utils/data_interface";
 import { GetDate } from "@/utils/auxiliary";
 import AddTeacherMenu from "../modals/forms/add_teachermenu";
+import MultiSelectTeacher from "../modals/forms/select_teacher";
+import { teachers } from "@/utils/datasamples";
+import { json } from "stream/consumers";
 // import { cookies } from "next/headers";
 
 // const navlist = dashboardNavList;
 
-const DashboardNav = (evening_data: any) => {
+const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
   const cur_route = useRouter();
 
   const eve_data: Evening[] = evening_data.evening_data;
+  // const teach_data = teacher_data.teacher_data;
+
+  console.log(teach_data[0]);
   // console.log(eve_data);
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,6 +63,27 @@ const DashboardNav = (evening_data: any) => {
     return check;
   };
 
+  const handleOnChange = async (event: any) => {
+    setGlobalEvening(event.target.value);
+
+    try {
+      const evening_Response = await fetch("/api/fetch_teacher_data/route?evening=" + globalEvening,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const evenings = await evening_Response.json();
+
+      console.log(evenings);
+    } catch (err) {
+      console.log({ error: err });
+    }
+  };
+
   if (!isMounted) {
     return null; // Don't render the component on the server
   }
@@ -77,9 +98,7 @@ const DashboardNav = (evening_data: any) => {
             // ! Onchange of this evening paramenter I need to set a global balue that will help fetch data for a particular evening  evenig
             // Todo: Done
             // value={globalEvening || "all"}
-            onChange={(e) => {
-              setGlobalEvening(e.target.value);
-            }}
+            onChange={(e) => handleOnChange(e)}
           >
             <option
               value="all"
@@ -123,7 +142,9 @@ const DashboardNav = (evening_data: any) => {
           {/* Teachers Navigations */}
           {cur_route.asPath == "/teachers" ? (
             <PlusIcon
-              onClick={() => openModal("add_teacher", "Add Teachers")}
+              onClick={() =>
+                openModal("add_teacher", "Add Teachers to Evening")
+              }
               tooltip={"Add Teacher to Evening"}
             />
           ) : null}
@@ -174,6 +195,9 @@ const DashboardNav = (evening_data: any) => {
           )}
           {formType === "teacher_form" && (
             <AddTeacherMenu onClose={closeModal} />
+          )}
+          {formType === "add_teacher" && (
+            <MultiSelectTeacher onClose={closeModal} />
           )}
         </div>
       </Modal>

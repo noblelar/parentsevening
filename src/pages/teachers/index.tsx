@@ -1,5 +1,5 @@
 import DashboardNav from "@/components/ui/dashboardnav";
-import React from "react";
+import React, { useEffect } from "react";
 import TeacherTable from "./teachertable";
 import { teachers } from "@/utils/datasamples";
 import Layout from "../layout/layout";
@@ -12,8 +12,13 @@ import Spinner from "@/components/spinner";
 
 const Teachers = (props: any) => {
   const teachers: Teacher[] = props.teachers;
-  const { isLoading } = useGlobalContext();
+  const { isLoading, setGlobalTeachers } = useGlobalContext();
   const evenings: Evening[] = props.evenings;
+
+  console.log(props.teachers);
+  useEffect(() => {
+    setGlobalTeachers(teachers);
+  }, [teachers]);
 
   //  ! Checking the user type
   const userDetail = props.user;
@@ -33,7 +38,7 @@ const Teachers = (props: any) => {
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
-        <DashboardNav evening_data={evenings} />
+        <DashboardNav evening_data={evenings} teach_data={teachers} />
         {teachers.length === 0 ? (
           no_teacher
         ) : (

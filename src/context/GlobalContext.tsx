@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 interface GlobalContextProps {
   globalValue: any;
   setGlobalValue: React.Dispatch<React.SetStateAction<any>>;
+  globalTeachers: any;
+  setGlobalTeachers: React.Dispatch<React.SetStateAction<any>>;
   globalEvening: any;
   setGlobalEvening: React.Dispatch<React.SetStateAction<any>>;
   isLoading: boolean; // To track the loading state
@@ -16,6 +18,7 @@ const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
 // Create a provider component
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [globalValue, setGlobalValue] = useState<any>();
+  const [globalTeachers, setGlobalTeachers] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -72,6 +75,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       value={{
         globalValue,
         setGlobalValue,
+        globalTeachers,
+        setGlobalTeachers,
         globalEvening,
         setGlobalEvening,
         isLoading,

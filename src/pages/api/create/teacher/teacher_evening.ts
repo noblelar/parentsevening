@@ -2,23 +2,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { verifyJWT } from "@/utils/middleware";
 import cookie from "cookie";
 import { evenings } from "@/utils/datasamples";
-import { Teacher } from "@/utils/data_interface";
 
-// get
-
-const getTeacherData = (teacher_evening: any) => {
-  let teachers: any = [];
-  teacher_evening.map((teach_eve: any) => {
-    teachers.push(teach_eve.Teacher);
-  });
-  return teachers;
-};
-
-export default async function getTeachers(
+export default async function createTeacher(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "GET") {
+  if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
@@ -43,35 +32,39 @@ export default async function getTeachers(
   const check = adminCheck();
 
   if (check) {
-    const evening = req.query;
-    console.log(evening);
+    // Get data from the request body
+    const { evening, teachers } = req.body;
+
+    const teacherEvening = {
+      evening_id: evening,
+      teacher_ids: teachers,
+    };
 
     try {
       const response = await fetch(
-        process.env.BACKEND_URL + "/teacherevening/teachers/" + evening.evening,
+        process.env.BACKEND_URL + "/teacherevening/many",
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify(teacherEvening),
         }
       );
 
       const teach_eve = await response.json();
 
-      const tea = getTeacherData(teach_eve.teachers)
-
       // Mock saving the data (replace with your actual logic)
-      // console.log("Received data:", tea);
+      console.log("Received data:", teach_eve);
 
       // Return success response
       res.status(200).json({
-        message: "Teacher successfully Fetch",
-        teacher_eveing: tea,
+        message: "Teacher successfully added to Evening!",
+        teacher_eveing: teach_eve,
         user: check,
       });
     } catch (error) {
-      console.error("Error fetching teacher evening:", error);
+      console.error("Error creating teacher evening:", error);
       res.status(500).json({ message: "Internal server error", error });
     }
   }
