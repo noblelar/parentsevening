@@ -23,7 +23,7 @@ const timeSlots: TimeSlot[] = times.map((time) => JSON.parse(time));
 const AppointmentDashboard = () => {
   return (
     <div className=" grid grid-flow-col gap-4 overflow-scroll ">
-      <div className=" w-[120px] bg-primary_light/90 sticky left-0 top-0 z-30 ">
+      <div className=" w-[120px] bg-primary_light/90 sticky left-0 top-0 z-10 ">
         <div className=" text-center font-abel font-bold text-white ">
           Name:
         </div>

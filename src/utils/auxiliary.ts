@@ -1,5 +1,5 @@
-export const GetDate = (date: string) => {
-  if (!date) {
+export const GetDate = (date: any) => {
+  if (!date || typeof(date) != "string" || date == undefined) {
     return null;
   }
   const dateObject = new Date(date);

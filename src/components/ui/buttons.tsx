@@ -5,6 +5,7 @@ import { TiUserAdd } from "react-icons/ti";
 import { RiCalendar2Line } from "react-icons/ri";
 import { VscDebugStart } from "react-icons/vsc";
 import { RiSave3Line } from "react-icons/ri";
+import { AiOutlineProduct } from "react-icons/ai";
 
 const Button: React.FC<ButtonProps> = ({ onClick, text }) => {
   return (
@@ -69,7 +70,10 @@ const SaveIcon = ({ onClick, tooltip }: { onClick: () => void; tooltip: string }
   <IconWithTooltip Icon={RiSave3Line} onClick={onClick} tooltip={tooltip} size={28} />
 );
 
+const GenerateIcon = ({ onClick, tooltip }: { onClick: () => void; tooltip: string }) => (
+  <IconWithTooltip Icon={AiOutlineProduct} onClick={onClick} tooltip={tooltip} size={28} />
+);
 
 
 
-export { PlusIcon, UserAddIcon, CalendarIcon, StartIcon, SaveIcon };
+export { PlusIcon, UserAddIcon, CalendarIcon, StartIcon, SaveIcon, GenerateIcon };

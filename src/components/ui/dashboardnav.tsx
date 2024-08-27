@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import {
   CalendarIcon,
+  GenerateIcon,
   PlusIcon,
   SaveIcon,
   StartIcon,
@@ -17,6 +18,8 @@ import AddTeacherMenu from "../modals/forms/add_teachermenu";
 import MultiSelectTeacher from "../modals/forms/select_teacher";
 import { teachers } from "@/utils/datasamples";
 import { json } from "stream/consumers";
+import LargeModal from "../modals/large_modal";
+import GenerateSlots from "../modals/forms/generate_slots";
 // import { cookies } from "next/headers";
 
 // const navlist = dashboardNavList;
@@ -31,6 +34,7 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
   // console.log(eve_data);
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [LisModalOpen, setLIsModalOpen] = useState(false);
   const [formType, setFormType] = useState<string>("");
   const [title, setFormTitle] = useState<string>("");
   const {
@@ -68,6 +72,16 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
     setIsModalOpen(false);
   };
 
+  const LopenModal = (form: string, title: string) => {
+    setFormType(form);
+    setFormTitle(title);
+    setLIsModalOpen(true);
+  };
+
+  const LcloseModal = () => {
+    setLIsModalOpen(false);
+  };
+
   const checkId = (id: any) => {
     const check = id == globalEvening ? true : false;
     return check;
@@ -79,7 +93,7 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
 
     try {
       const evening_Response = await fetch(
-        `/api/fetch_teacher_data/route?evening=${selectedEvening}`,
+        `/api/fetch/fetch_teacher_data/route?evening=${selectedEvening}`,
         {
           method: "GET",
           headers: {
@@ -148,6 +162,12 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
 
           {/* Appointments Navigations */}
           {cur_route.asPath == "/appointments" ? (
+            <GenerateIcon
+              onClick={() => LopenModal("generate_slots", "Booking Slots")}
+              tooltip={"Generate Teacher Slots"}
+            />
+          ) : null}
+          {cur_route.asPath == "/appointments" ? (
             <CalendarIcon
               onClick={() => openModal("generate_booking", "Booking")}
               tooltip={"Generate Optimal Booking"}
@@ -215,6 +235,14 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
           )}
         </div>
       </Modal>
+
+      <LargeModal isOpen={LisModalOpen} onClose={LcloseModal} formTitle={title}>
+        <div>
+          {formType === "generate_slots" && (
+            <GenerateSlots LonClose={LcloseModal} />
+          )}
+        </div>
+      </LargeModal>
     </div>
   );
 };
