@@ -1,7 +1,12 @@
 import { useGlobalContext } from "@/context/GlobalContext";
 import AppointmentDashboard from "@/pages/appointments/app_dash";
 import { GetDate, GetEveningStatus, GetTime } from "@/utils/auxiliary";
-import { Appointment, Evening, Teacher, TimeSlot } from "@/utils/data_interface";
+import {
+  Appointment,
+  Evening,
+  Teacher,
+  TimeSlot,
+} from "@/utils/data_interface";
 import { evenings } from "@/utils/datasamples";
 import React, { useEffect, useState } from "react";
 
@@ -117,9 +122,9 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
 
   // console.log(groupByTeacher(slotList));
 
-  console.log(slotList)
-  console.log(slotkey)
-  console.log(globalEveningTeachers)
+  console.log(slotList);
+  console.log(slotkey);
+  console.log(globalEveningTeachers);
 
   if (!globalEvening || globalEvening === "all") {
     return <div>Please select an evening to generate slots.</div>;
@@ -133,28 +138,28 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
     return (
       <div className=" p-6 bg-white rounded-lg shadow-lg min-[50vh] max-h-[80vh] flex flex-col justify-between ">
         <div className=" overflow-y-scroll  scrollbar scrollbar-thumb-blue-500 scrollbar-track-gray-200 items-center justify-center justify-items-center min-w-full min-h-full  ">
-          <AppointmentDashboard timeslots={slotkey} eve_teachers={globalEveningTeachers} eve_appointments={slotList} />
-          {slotList.map((slot_item: any) => {
-            const eve = slot_item.evening_id;
-            const end = slot_item.ending_time;
-            const start = slot_item.starting_time;
-            const slot = slot_item.slotid;
-            const teacher = slot_item.teacher_id;
-            return (
-              <p key={slot_item.evening_id}>
-                {"Evening:" +
-                  eve +
-                  "Stating Time:" +
-                  start +
-                  "Ending Time:" +
-                  end +
-                  "Slot Number :" +
-                  slot +
-                  "Teacher Number :" +
-                  teacher}
-              </p>
-            );
-          })}
+          <AppointmentDashboard
+            timeslots={slotkey}
+            eve_teachers={globalEveningTeachers}
+            eve_appointments={slotList}
+          />
+        </div>
+        {/* Action buttons */}
+        <div className="flex items-center flex-row-reverse justify-between">
+          <button
+            // type="submit"
+            onClick={(e) => (e)}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Save Schedule
+          </button>
+          <button
+            type="button"
+            onClick={LonClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     );

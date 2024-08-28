@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-// import { appointments, parents, students } from "@/utils/datasamples";
 import { FaCheck, FaClock } from "react-icons/fa";
 import { Appointment } from "@/utils/data_interface";
-// import { appointments, parents, students } from './data';
 
 interface AppointmentBoxProps {
   appointmenta: Appointment;
