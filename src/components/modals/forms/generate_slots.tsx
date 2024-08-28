@@ -7,7 +7,6 @@ import {
   Teacher,
   TimeSlot,
 } from "@/utils/data_interface";
-import { evenings } from "@/utils/datasamples";
 import React, { useEffect, useState } from "react";
 
 interface Menuprops {
@@ -111,16 +110,11 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
 
         setSlotList(data.ap_slot);
         setSlotkey(data.slots);
-        // console.log(data);
       } catch (err: any) {
         console.log(err);
       }
-    } else {
-      //   setIsLoading(false);
     }
   };
-
-  // console.log(groupByTeacher(slotList));
 
   console.log(slotList);
   console.log(slotkey);
@@ -148,7 +142,7 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
         <div className="flex items-center flex-row-reverse justify-between">
           <button
             // type="submit"
-            onClick={(e) => (e)}
+            onClick={(e) => e}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Save Schedule
