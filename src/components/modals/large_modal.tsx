@@ -17,7 +17,7 @@ const LargeModal: React.FC<ModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-8 rounded shadow-lg w-[90vw] bg-opacity-90 h-[90vh] ">
+      <div className="bg-white p-8 rounded shadow-lg w-[90vw] bg-opacity-90  ">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">{formTitle}</h2>
           <button

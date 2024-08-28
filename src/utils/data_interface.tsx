@@ -43,6 +43,12 @@ export interface IBaseLayout {
 
 // ! Upgrades
 
+export interface TimeSlot {
+  slotid: number;
+  starting_time: string;
+  ending_time: string;
+}
+
 export interface Role {
   role_id: number;
   role_type: string;
@@ -102,15 +108,15 @@ export interface Student {
 export interface Appointment {
   appointment_id: number;
   evening_id: number;
-  parent_id: number;
+  parent_id: number | null;
   teacher_id: number;
-  student_id: number;
-  slot: number;
-  venue: string;
-  status: string;
+  student_id: number | null;
+  slot: number | null;
+  venue: string | null;
+  status: string | null;
   starting_time: string | null;
   ending_time: string | null;
-  duration: number;
+  duration: number | null;
   availability_status: boolean;
   Evening: Evening;
   Teacher: Teacher;
@@ -155,10 +161,7 @@ export interface Feedback {
 //    // Add other properties if needed
 //  }
 
-
-
-
-// ! Abandoneded 
+// ! Abandoneded
 
 // interface Appointment {
 //   appointment_id: number;

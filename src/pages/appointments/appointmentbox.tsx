@@ -1,22 +1,21 @@
 import React, { useState } from "react";
-import { appointments, parents, students } from "@/utils/datasamples"; 
+// import { appointments, parents, students } from "@/utils/datasamples";
 import { FaCheck, FaClock } from "react-icons/fa";
+import { Appointment } from "@/utils/data_interface";
 // import { appointments, parents, students } from './data';
 
 interface AppointmentBoxProps {
-  appointment_id: number;
+  appointmenta: Appointment;
 }
 
-const AppointmentBox: React.FC<AppointmentBoxProps> = ({ appointment_id }) => {
-  const appointment = appointments.find(
-    (a) => a.appointment_id === appointment_id
-  );
-  const parent = appointment?.parent_id
-    ? parents.find((p) => p.id === appointment.parent_id)
-    : null;
-  const student = appointment?.student_id
-    ? students.find((s) => s.id === appointment.student_id)
-    : null;
+const AppointmentBox: React.FC<AppointmentBoxProps> = ({ appointmenta }) => {
+  const appointment = appointmenta;
+  // const parent = appointment?.parent_id
+  //   ? parents.find((p) => p.parent_id === appointment.parent_id)
+  //   : null;
+  // const student = appointment?.student_id
+  //   ? students.find((s) => s.id === appointment.student_id)
+  //   : null;
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -32,7 +31,7 @@ const AppointmentBox: React.FC<AppointmentBoxProps> = ({ appointment_id }) => {
     setIsHovered(false);
   };
 
-  const br = <br/>;
+  const br = <br />;
 
   return (
     <div
@@ -48,7 +47,7 @@ const AppointmentBox: React.FC<AppointmentBoxProps> = ({ appointment_id }) => {
       {isHovered && (
         <div className="absolute bottom-14 left-1/2 transform -translate-x-1/2 p-2 bg-black text-white text-xs rounded z-40 text-center min-w-[100px] ">
           {appointment.parent_id && appointment.student_id
-            ? `By: ${parent?.firstname} & For: ${student?.firstname}`
+            ? `By: ${appointment.Parent?.first_name} & For: ${appointment.Student?.first_name}`
             : "Free slot"}
         </div>
       )}

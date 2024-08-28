@@ -25,7 +25,7 @@ export const GetTime = (date: string | undefined) => {
   return timeOnly;
 };
 
-export const GetEveningStatus = (status: string) => {
+export const GetEveningStatus = (status: any) => {
   let publicStatus;
 
   switch (status) {

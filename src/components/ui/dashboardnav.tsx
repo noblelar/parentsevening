@@ -41,6 +41,7 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
     globalEvening,
     setGlobalEvening,
     setGlobalEveningTeachers,
+    globalEveningTeachers,
     setGlobalTeachers,
   } = useGlobalContext();
 
@@ -86,6 +87,31 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
     const check = id == globalEvening ? true : false;
     return check;
   };
+
+  useEffect(() => {
+    const TeacherEveingRefill = async () => {
+      try {
+        const evening_Response = await fetch(
+          `/api/fetch/fetch_teacher_data/route?evening=${globalEvening}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+  
+        const evenings = await evening_Response.json();
+  
+        if (evening_Response.ok) {
+          setGlobalEveningTeachers(evenings.teacher_eveing);
+        }
+      } catch (err) {
+        console.error("Error fetching teachers", err);
+      }
+    }
+    TeacherEveingRefill()
+  }, [globalEvening])
 
   const handleOnChange = async (event: any) => {
     const selectedEvening = event.target.value;

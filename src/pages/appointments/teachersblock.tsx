@@ -1,27 +1,33 @@
 import React from "react";
 import AppointmentBox from "./appointmentbox";
-import { appointments, teachers } from "@/utils/datasamples";
+import { Appointment } from "@/utils/data_interface";
+// import { appointments, teachers } from "@/utils/datasamples";
 
-const TeachersBlock = ({teacher}: {teacher: any}) => {
-//   const teacher = teachers[0];
+const TeachersBlock = ({
+  teacher,
+  appointments,
+}: {
+  teacher: any;
+  appointments: any;
+}) => {
+  //   const teacher = teachers[0];
   //   const appointment = appointments
 
   return (
     <div className=" m-4 w-[150px] ">
       <div className=" text-center font-abel font-bold ">
-        {teacher.firstname[0] + ". " + teacher.lastname}
+        {teacher.first_name[0] + ". " + teacher.last_name}
       </div>
-      {appointments.map((app) => {
-        if (app.teacher_id == teacher.id) {
+      {appointments.map((app: Appointment) => {
+        if (app.teacher_id == teacher.staff_id) {
           return (
             <AppointmentBox
-              key={app.appointment_id}
-              appointment_id={app.appointment_id}
+              key={teacher.id + "_" + app.appointment_id}
+              appointmenta={app}
             />
           );
         }
       })}
-
     </div>
   );
 };
