@@ -16,22 +16,15 @@ import { Evening, Teacher } from "@/utils/data_interface";
 import { GetDate } from "@/utils/auxiliary";
 import AddTeacherMenu from "../modals/forms/add_teachermenu";
 import MultiSelectTeacher from "../modals/forms/select_teacher";
-import { teachers } from "@/utils/datasamples";
-import { json } from "stream/consumers";
 import LargeModal from "../modals/large_modal";
 import GenerateSlots from "../modals/forms/generate_slots";
-// import { cookies } from "next/headers";
 
-// const navlist = dashboardNavList;
 
-const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
+const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
   const cur_route = useRouter();
 
   const eve_data: Evening[] = evening_data.evening_data;
-  // const teach_data = teacher_data.teacher_data;
 
-  // console.log(teach_data);
-  // console.log(eve_data);
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [LisModalOpen, setLIsModalOpen] = useState(false);
@@ -49,7 +42,6 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[]) => {
   useEffect(() => {
     setIsMounted(true); // Component has mounted
   }, []);
-  // const { globalValue, setGlobalValue } = useGlobalContext();
 
   // Ensure the selected option persists across page navigation
   useEffect(() => {

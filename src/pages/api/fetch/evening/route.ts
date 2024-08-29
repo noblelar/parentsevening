@@ -22,7 +22,7 @@ export default async function getTeachers(
         );
 
         const user_role = userData.user_info.Role.role_type;
-        return user_role === "admin"; // Return true if admin
+        return user_role === "admin" || user_role === "parent" || user_role === "teacher"; // Return true if admin
       }
     }
     return false;

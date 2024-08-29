@@ -13,14 +13,15 @@ import { Appointment, Evening, TimeSlot } from "@/utils/data_interface";
 import AppointmentTable from "./appointments_table";
 import { GetTime } from "@/utils/auxiliary";
 
-
 const Appointments: React.FC = (props: any) => {
-  const { isLoading, globalEvening, globalEveningTeachers } = useGlobalContext();
+  const { isLoading, globalEvening, globalEveningTeachers } =
+    useGlobalContext();
   const evenings: Evening[] = props.evenings;
   const appointments = props.appointments;
   const [eveningDetails, setEveningDetails] = useState<Evening>();
   const [slotkey, setSlotkey] = useState<TimeSlot[]>([]);
-  
+
+  // console.log(props)
 
   useEffect(() => {
     const fetchEveningData = async () => {
@@ -61,27 +62,21 @@ const Appointments: React.FC = (props: any) => {
     }
   }, [globalEvening, globalEveningTeachers]);
 
-
-  useEffect(()=> {
-
+  console.log(props);
+  useEffect(() => {
     const getSlotKeys = async () => {
       // globalEveningTeachers.length > 0
-      if (
-        globalEvening &&
-        globalEvening !== "all" 
-      ) {
+      if (globalEvening && globalEvening !== "all") {
         const start_time = GetTime(eveningDetails?.start_time);
         const end_time = GetTime(eveningDetails?.end_time);
         const interval = eveningDetails?.time_per_meeting;
 
-  
         const genData = {
           start_time,
           end_time,
           interval,
-        
         };
-  
+
         try {
           // Fetch evening data by ID from the API
           const response = await fetch(`api/generates/getslots`, {
@@ -92,12 +87,12 @@ const Appointments: React.FC = (props: any) => {
             body: JSON.stringify(genData),
           });
           const data = await response.json();
-  
+
           if (response.ok && !data.error) {
             // setSlotList(data.ap_slot);
             setSlotkey(data.slots);
           }
-  
+
           // console.log(data);
         } catch (err: any) {
           console.log(err);
@@ -106,20 +101,23 @@ const Appointments: React.FC = (props: any) => {
     };
 
     getSlotKeys();
-  
-  }, [globalEvening, globalEveningTeachers])
+  }, [globalEvening, globalEveningTeachers]);
 
-  console.log(slotkey);
+  // console.log(slotkey);
 
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
-        <DashboardNav evening_data={evenings} />
+        <DashboardNav evening_data={evenings} prop={props} />
 
         {globalEvening == "all" ? (
           <AppointmentTable appointments={appointments} />
         ) : (
-          <AppointmentDashboard timeslots={slotkey} eve_teachers={globalEveningTeachers} eve_appointments={appointments} />
+          <AppointmentDashboard
+            timeslots={slotkey}
+            eve_teachers={globalEveningTeachers}
+            eve_appointments={appointments}
+          />
         )}
       </div>
     </Layout>
@@ -156,6 +154,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     };
   }
+
   // console.log(user_id);
 
   try {
@@ -182,6 +181,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       }
     );
 
+    const published_Evening = await fetch(
+      process.env.BACKEND_URL + "/evenings/published/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     const appointment_Response = await fetch(
       process.env.BACKEND_URL + "/appointments",
       {
@@ -193,7 +202,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     );
 
     const data = await response.json();
-    const evening_Data = await evening_Response.json();
+
+    let evening_Data;
+    if (data.Role.role_type == "parent") {
+      evening_Data = await published_Evening.json();
+    } else {
+      evening_Data = await evening_Response.json();
+    }
+
+    // const eveningByPlanner = await evening_Response.json();
     const appointment_Data = await appointment_Response.json();
     console.log("API Response:", appointment_Data);
 

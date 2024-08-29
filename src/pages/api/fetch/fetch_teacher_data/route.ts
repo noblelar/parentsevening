@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { verifyJWT } from "@/utils/middleware";
 import cookie from "cookie";
-import { evenings } from "@/utils/datasamples";
-import { Teacher } from "@/utils/data_interface";
+
 
 // get
 
@@ -34,7 +33,7 @@ export default async function getTeachers(
         //   console.log(userData);
 
         const user_role = userData.user_info.Role.role_type;
-        const check = user_role === "admin";
+        const check = user_role === "admin" || user_role === "parent" || user_role === "teacher";
         return check;
       }
     }

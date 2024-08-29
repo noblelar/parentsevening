@@ -33,7 +33,7 @@ const AppointmentBox: React.FC<AppointmentBoxProps> = ({ appointmenta }) => {
 
   return (
     <div
-      className="relative flex items-center justify-center w-[100px] h-12 m-4 mx-auto bg-white shadow-lg rounded"
+      className="relative flex items-center justify-center w-[100px] h-12 m-4 mx-auto bg-white shadow-lg rounded cursor-pointer "
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

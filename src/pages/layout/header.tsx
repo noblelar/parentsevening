@@ -12,6 +12,7 @@ const Header = (user: any) => {
     setFirstName(name ?? "");
   }, []);
 
+  console.log(user)
   //  ! Checking the user type
   const userDetail = user.user.user;
   const adminCheck = userDetail.Role.role_type === "admin";
