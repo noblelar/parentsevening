@@ -1,6 +1,6 @@
 import Modal from "@/components/modals/modal";
 import DashboardNav from "@/components/ui/dashboardnav";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TeachersBlock from "./teachersblock";
 import AppointmentDashboard from "./app_dash";
 import { GetServerSideProps } from "next";
@@ -9,13 +9,107 @@ import cookie from "cookie";
 import Layout from "../layout/layout";
 import { useGlobalContext } from "@/context/GlobalContext";
 import Spinner from "@/components/spinner";
-import { Evening } from "@/utils/data_interface";
+import { Appointment, Evening, TimeSlot } from "@/utils/data_interface";
 import AppointmentTable from "./appointments_table";
+import { GetTime } from "@/utils/auxiliary";
+
 
 const Appointments: React.FC = (props: any) => {
-  const { isLoading, globalEvening } = useGlobalContext();
+  const { isLoading, globalEvening, globalEveningTeachers } = useGlobalContext();
   const evenings: Evening[] = props.evenings;
   const appointments = props.appointments;
+  const [eveningDetails, setEveningDetails] = useState<Evening>();
+  const [slotkey, setSlotkey] = useState<TimeSlot[]>([]);
+  
+
+  useEffect(() => {
+    const fetchEveningData = async () => {
+      if (globalEvening && globalEvening !== "all") {
+        try {
+          // Fetch evening data by ID from the API
+          const response = await fetch(
+            `api/fetch/evening/route?evening=${globalEvening}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const data = await response.json();
+          // console.log(data.evening);
+          setEveningDetails(data.evening);
+          //  setIsLoading(false);
+        } catch (err: any) {
+          console.log(err);
+        }
+      } else {
+        //   setIsLoading(false);
+      }
+    };
+
+    // console.log(globalEveningTeachers);
+    fetchEveningData();
+
+    // Check if globalEvening exists and fetch its details
+    if (globalEvening !== "all" && globalEveningTeachers?.length > 0) {
+      // Fetch and display the evening details based on the globalEvening context
+      setEveningDetails({
+        ...globalEvening, // You can customize this based on what data is stored in globalEvening
+        teachers: globalEveningTeachers,
+      });
+    }
+  }, [globalEvening, globalEveningTeachers]);
+
+
+  useEffect(()=> {
+
+    const getSlotKeys = async () => {
+      // globalEveningTeachers.length > 0
+      if (
+        globalEvening &&
+        globalEvening !== "all" 
+      ) {
+        const start_time = GetTime(eveningDetails?.start_time);
+        const end_time = GetTime(eveningDetails?.end_time);
+        const interval = eveningDetails?.time_per_meeting;
+
+  
+        const genData = {
+          start_time,
+          end_time,
+          interval,
+        
+        };
+  
+        try {
+          // Fetch evening data by ID from the API
+          const response = await fetch(`api/generates/getslots`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(genData),
+          });
+          const data = await response.json();
+  
+          if (response.ok && !data.error) {
+            // setSlotList(data.ap_slot);
+            setSlotkey(data.slots);
+          }
+  
+          // console.log(data);
+        } catch (err: any) {
+          console.log(err);
+        }
+      }
+    };
+
+    getSlotKeys();
+  
+  }, [globalEvening, globalEveningTeachers])
+
+  console.log(slotkey);
 
   return (
     <Layout user_data={props}>
@@ -25,7 +119,7 @@ const Appointments: React.FC = (props: any) => {
         {globalEvening == "all" ? (
           <AppointmentTable appointments={appointments} />
         ) : (
-          <AppointmentDashboard />
+          <AppointmentDashboard timeslots={slotkey} eve_teachers={globalEveningTeachers} eve_appointments={appointments} />
         )}
       </div>
     </Layout>

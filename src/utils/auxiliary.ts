@@ -1,3 +1,5 @@
+
+
 export const GetDate = (date: any) => {
   if (!date || typeof(date) != "string" || date == undefined) {
     return null;
@@ -67,4 +69,21 @@ export const MakeDate = (date: string) => {
   const dateOnly = dateObject.toLocaleDateString("en-GB");
 
   return dateOnly;
+};
+
+
+// ! can be exported to other pages for logout functionality 
+export const handleLogOut = async (route:any) => {
+  const response = await fetch("/api/auth/logout/route", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    // body: JSON.stringify(loginData),
+  });
+
+  if (response.ok) {
+    localStorage.clear();
+    route.push("/login");
+  }
 };

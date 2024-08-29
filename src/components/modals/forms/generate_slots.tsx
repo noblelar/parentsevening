@@ -35,6 +35,7 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
   const [eveningDetails, setEveningDetails] = useState<Evening>();
   const [slotList, setSlotList] = useState<Appointment[]>([]);
   const [slotkey, setSlotkey] = useState<TimeSlot[]>([]);
+  const [saveSuccess, setSaveSuccess] = useState<boolean | null>(null);
 
   useEffect(() => {
     const fetchEveningData = async () => {
@@ -97,6 +98,8 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
         evening_id,
       };
 
+      // console.log(genData)
+
       try {
         // Fetch evening data by ID from the API
         const response = await fetch(`api/generates/gen_slots`, {
@@ -108,17 +111,53 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
         });
         const data = await response.json();
 
-        setSlotList(data.ap_slot);
-        setSlotkey(data.slots);
+        if (response.ok && !data.error) {
+          setSlotList(data.ap_slot);
+          setSlotkey(data.slots);
+        }
+
+        // console.log(data);
       } catch (err: any) {
         console.log(err);
       }
     }
   };
 
-  console.log(slotList);
-  console.log(slotkey);
-  console.log(globalEveningTeachers);
+  // Function to save generated appointments (slots) to the database
+  const handleSaveAppointments = async (event: any) => {
+    event.preventDefault();
+
+    if (slotList.length > 0) {
+      try {
+        const response = await fetch(`/api/create/appointment/route`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            evening_id: globalEvening,
+            appointmentsa: slotList,
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log("Appointments saved successfully:", result);
+          setSaveSuccess(true); // Set success state
+        } else {
+          console.error("Failed to save appointments");
+          setSaveSuccess(false); // Set failure state
+        }
+      } catch (error) {
+        console.error("Error saving appointments:", error);
+        setSaveSuccess(false); // Set failure state
+      }
+    }
+  };
+
+  // console.log(slotList);
+  // console.log("Slots", slotkey);
+  // console.log(globalEveningTeachers);
 
   if (!globalEvening || globalEvening === "all") {
     return <div>Please select an evening to generate slots.</div>;
@@ -142,7 +181,7 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
         <div className="flex items-center flex-row-reverse justify-between">
           <button
             // type="submit"
-            onClick={(e) => e}
+            onClick={(e) => handleSaveAppointments(e)}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Save Schedule

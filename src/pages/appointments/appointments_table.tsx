@@ -67,6 +67,7 @@ const AppointmentTable: React.FC<AppointmentTableProps> = ({
 
   const filteredAppointments = sortedAppointments.filter((appointment) => {
     const searchValue = filters.search.toLowerCase();
+    const venue = appointment.venue ? appointment.venue : "";
     return (
       (appointment.Teacher?.first_name.toLowerCase() || "").includes(
         searchValue
@@ -77,7 +78,7 @@ const AppointmentTable: React.FC<AppointmentTableProps> = ({
       (appointment.Student?.first_name.toLowerCase() || "").includes(
         searchValue
       ) ||
-      (appointment.venue.toLowerCase() || "").includes(searchValue) ||
+      (venue.toLowerCase() || "").includes(searchValue) ||
       (GetDate(appointment.Evening.date)?.toLowerCase() || "").includes(
         searchValue
       )
@@ -171,8 +172,8 @@ const AppointmentTable: React.FC<AppointmentTableProps> = ({
                   </td>
                   <td className="px-4 py-2 border-b">{eveningDetails}</td>
                   <td className="px-4 py-2 border-b">{teacherName}</td>
-                  <td className="px-4 py-2 border-b">{parentName}</td>
-                  <td className="px-4 py-2 border-b">{studentName}</td>
+                  <td className="px-4 py-2 border-b">{appointment.Parent ? parentName: "Not Booked"}</td>
+                  <td className="px-4 py-2 border-b">{ appointment.Parent? studentName : "Not Booked"}</td>
                   <td className="px-4 py-2 border-b">
                     {appointment.venue || "N/A"}
                   </td>

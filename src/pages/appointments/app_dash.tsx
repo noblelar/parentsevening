@@ -30,9 +30,9 @@ const AppointmentDashboard: React.FC<{
   const slots: TimeSlot[] = timeslots.length > 0 ? timeslots : defaultTimeSlots;
 
   // Log data to confirm correct props
-  console.log("Time Slots:", slots);
-  console.log("Teachers:", eve_teachers);
-  console.log("Appointments:", eve_appointments);
+  // console.log("Time Slots:", slots);
+  // console.log("Teachers:", eve_teachers);
+  // console.log("Appointments:", eve_appointments);
 
   return (
     <div className="grid grid-flow-col gap-4 overflow-scroll">
