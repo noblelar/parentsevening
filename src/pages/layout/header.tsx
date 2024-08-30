@@ -1,9 +1,13 @@
 "use client";
+import { useGlobalContext } from "@/context/GlobalContext";
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaBell, FaUserCircle } from "react-icons/fa";
 
 const Header = (user: any) => {
   // const users = getServerSideProps;
+
+  const { userType, setUserType, globalEvening, globalValue } =
+    useGlobalContext();
 
   const [firstName, setFirstName] = useState("");
   useEffect(() => {
@@ -12,9 +16,13 @@ const Header = (user: any) => {
     setFirstName(name ?? "");
   }, []);
 
-  console.log(user)
-  //  ! Checking the user type
   const userDetail = user.user.user;
+  useEffect(() => {
+    setUserType(userDetail.Role.role_type);
+  }, [globalEvening, globalValue, userType]);
+
+  console.log(user);
+  //  ! Checking the user type
   const adminCheck = userDetail.Role.role_type === "admin";
   const teacherCheck = userDetail.Role.role_type === "teacher";
   const parentCheck = userDetail.Role.role_type === "parent";

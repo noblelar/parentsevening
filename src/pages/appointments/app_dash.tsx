@@ -1,6 +1,7 @@
 import React from "react";
 import TeachersBlock from "./teachersblock";
 import { Appointment, Teacher, TimeSlot } from "@/utils/data_interface";
+import { useGlobalContext } from "@/context/GlobalContext";
 
 // A sample times array, you can remove this if you are always passing `timeslots` prop
 const defaultTimes = [
@@ -18,9 +19,9 @@ const defaultTimeSlots: TimeSlot[] = defaultTimes.map((time) =>
 
 // Update the component to destructure the props directly
 const AppointmentDashboard: React.FC<{
-  timeslots: TimeSlot[]; // Expecting an array of timeslots
-  eve_teachers: Teacher[]; // Array of teacher objects
-  eve_appointments: Appointment[]; // Array of appointments
+  timeslots: TimeSlot[];
+  eve_teachers: Teacher[];
+  eve_appointments: Appointment[];
 }> = ({
   timeslots = defaultTimeSlots,
   eve_teachers = [],
@@ -29,10 +30,7 @@ const AppointmentDashboard: React.FC<{
   // Ensure slots fallback to the defaultTimeSlots if no timeslots are passed
   const slots: TimeSlot[] = timeslots.length > 0 ? timeslots : defaultTimeSlots;
 
-  // Log data to confirm correct props
-  // console.log("Time Slots:", slots);
-  // console.log("Teachers:", eve_teachers);
-  // console.log("Appointments:", eve_appointments);
+  const { userType } = useGlobalContext();
 
   return (
     <div className="grid grid-flow-col gap-4 overflow-scroll">

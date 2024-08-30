@@ -6,6 +6,7 @@ import { RiCalendar2Line } from "react-icons/ri";
 import { VscDebugStart } from "react-icons/vsc";
 import { RiSave3Line } from "react-icons/ri";
 import { AiOutlineProduct } from "react-icons/ai";
+import { CiBookmarkPlus } from "react-icons/ci";
 
 const Button: React.FC<ButtonProps> = ({ onClick, text }) => {
   return (
@@ -74,6 +75,11 @@ const GenerateIcon = ({ onClick, tooltip }: { onClick: () => void; tooltip: stri
   <IconWithTooltip Icon={AiOutlineProduct} onClick={onClick} tooltip={tooltip} size={28} />
 );
 
+const BookingIcon = ({ onClick, tooltip }: { onClick: () => void; tooltip: string }) => (
+  <IconWithTooltip Icon={CiBookmarkPlus} onClick={onClick} tooltip={tooltip} size={28} />
+);
 
 
-export { PlusIcon, UserAddIcon, CalendarIcon, StartIcon, SaveIcon, GenerateIcon };
+
+
+export { PlusIcon, UserAddIcon, CalendarIcon, StartIcon, SaveIcon, GenerateIcon, BookingIcon };

@@ -21,7 +21,7 @@ const Appointments: React.FC = (props: any) => {
   const [eveningDetails, setEveningDetails] = useState<Evening>();
   const [slotkey, setSlotkey] = useState<TimeSlot[]>([]);
 
-  // console.log(props)
+  console.log(props.user)
 
   useEffect(() => {
     const fetchEveningData = async () => {
@@ -108,7 +108,7 @@ const Appointments: React.FC = (props: any) => {
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
-        <DashboardNav evening_data={evenings} prop={props} />
+        <DashboardNav evening_data={evenings} />
 
         {globalEvening == "all" ? (
           <AppointmentTable appointments={appointments} />

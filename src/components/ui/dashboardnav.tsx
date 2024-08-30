@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
+  BookingIcon,
   CalendarIcon,
   GenerateIcon,
   PlusIcon,
@@ -18,11 +19,13 @@ import AddTeacherMenu from "../modals/forms/add_teachermenu";
 import MultiSelectTeacher from "../modals/forms/select_teacher";
 import LargeModal from "../modals/large_modal";
 import GenerateSlots from "../modals/forms/generate_slots";
+import Booking from "../modals/forms/booking";
 
 
 const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
   const cur_route = useRouter();
 
+  console.log()
   const eve_data: Evening[] = evening_data.evening_data;
 
   const [isMounted, setIsMounted] = useState(false);
@@ -35,9 +38,13 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
     setGlobalEvening,
     setGlobalEveningTeachers,
     globalEveningTeachers,
+    globalValue,
     setGlobalTeachers,
+    userType
   } = useGlobalContext();
 
+
+  console.log(globalValue)
   // Ensure the component only renders after it's mounted on the client
   useEffect(() => {
     setIsMounted(true); // Component has mounted
@@ -179,16 +186,16 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
           ) : null}
 
           {/* Appointments Navigations */}
-          {cur_route.asPath == "/appointments" ? (
+          {cur_route.asPath == "/appointments" && userType == 'admin' ? (
             <GenerateIcon
               onClick={() => LopenModal("generate_slots", "Booking Slots")}
               tooltip={"Generate Teacher Slots"}
             />
           ) : null}
-          {cur_route.asPath == "/appointments" ? (
-            <CalendarIcon
-              onClick={() => openModal("generate_booking", "Booking")}
-              tooltip={"Generate Optimal Booking"}
+          {cur_route.asPath == "/appointments" && userType == 'parent' ? (
+            <BookingIcon
+              onClick={() => LopenModal("generate_booking", "Booking")}
+              tooltip={" Book an Appointment "}
             />
           ) : null}
           {/* Teachers Navigations */}
@@ -259,7 +266,11 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
           {formType === "generate_slots" && (
             <GenerateSlots LonClose={LcloseModal} />
           )}
+          {formType === "generate_booking" && (
+            <Booking LonClose={LcloseModal} />
+          )}
         </div>
+        
       </LargeModal>
     </div>
   );

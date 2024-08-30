@@ -45,8 +45,8 @@ const AppointmentBox: React.FC<AppointmentBoxProps> = ({ appointmenta }) => {
       {isHovered && (
         <div className="absolute bottom-14 left-1/2 transform -translate-x-1/2 p-2 bg-black text-white text-xs rounded z-40 text-center min-w-[100px] ">
           {appointment.parent_id && appointment.student_id
-            ? `By: ${appointment.Parent?.first_name} & For: ${appointment.Student?.first_name}`
-            : "Free slot"}
+            ? `By: ${appointment.Parent?.first_name} & For: ${appointment.Student?.first_name} ${appointment.appointment_id}`
+            : `"Free slot" ${appointment.appointment_id} `}
         </div>
       )}
     </div>

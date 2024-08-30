@@ -6,6 +6,8 @@ import { Teacher } from "@/utils/data_interface";
 interface GlobalContextProps {
   globalValue: any;
   setGlobalValue: React.Dispatch<React.SetStateAction<any>>;
+  userType: any;
+  setUserType: React.Dispatch<React.SetStateAction<any>>;
   globalTeachers: any;
   setGlobalTeachers: React.Dispatch<React.SetStateAction<any>>;
   globalEveningTeachers: any;
@@ -21,6 +23,7 @@ const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
 // Create a provider component
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [globalValue, setGlobalValue] = useState<any>();
+  const [userType, setUserType] = useState<any>();
   const [globalTeachers, setGlobalTeachers] = useState<any>();
   const [globalEveningTeachers, setGlobalEveningTeachers] = useState<Teacher[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -79,6 +82,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       value={{
         globalValue,
         setGlobalValue,
+        userType,
+        setUserType,
         globalTeachers,
         setGlobalTeachers,
         globalEveningTeachers,
