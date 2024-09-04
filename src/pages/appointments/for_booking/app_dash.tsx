@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TeachersBlock from "./teachersblock";
-import { Appointment, Teacher, TimeSlot } from "@/utils/data_interface";
+import { Appointment, ApptTeach, Teacher, TimeSlot } from "@/utils/data_interface";
 import { useGlobalContext } from "@/context/GlobalContext";
 
 // A sample times array, you can remove this if you are always passing `timeslots` prop
@@ -22,10 +22,14 @@ const AppointmentDashboard: React.FC<{
   timeslots: TimeSlot[];
   eve_teachers: Teacher[];
   eve_appointments: Appointment[];
+  handleSelectAppt: ((a:ApptTeach)=> void);
+  verifySelected: ((a:number)=> boolean)
 }> = ({
   timeslots = defaultTimeSlots,
   eve_teachers = [],
   eve_appointments = [],
+  handleSelectAppt,
+  verifySelected
 }) => {
   // Ensure slots fallback to the defaultTimeSlots if no timeslots are passed
   const slots: TimeSlot[] = timeslots.length > 0 ? timeslots : defaultTimeSlots;
@@ -59,6 +63,8 @@ const AppointmentDashboard: React.FC<{
     appointments();
   }, [globalEvening]);
 
+
+
   return (
     <div className="grid grid-flow-col gap-4 overflow-scroll">
       {/* Time slots on the left */}
@@ -83,8 +89,7 @@ const AppointmentDashboard: React.FC<{
           teacher={teacher}
           appointments={theAppointments.filter(
             (appointment) => appointment.teacher_id === teacher.staff_id
-          )}
-          // timeslots={slots}
+          )} handleSelectAppt={handleSelectAppt } verifySelected={verifySelected}          // timeslots={slots}
         />
       ))}
     </div>

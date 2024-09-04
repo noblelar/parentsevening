@@ -134,6 +134,12 @@ export interface Feedback {
   created_at: string;
 }
 
+export interface ApptTeach {
+  appoitment_id: number;
+  teacher_id: number;
+  start_time: string
+}
+
 // export interface UserAccountT {
 //   user_id: number;
 //   username: string;

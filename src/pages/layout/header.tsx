@@ -21,7 +21,6 @@ const Header = (user: any) => {
     setUserType(userDetail.Role.role_type);
   }, [globalEvening, globalValue, userType]);
 
-  console.log(user);
   //  ! Checking the user type
   const adminCheck = userDetail.Role.role_type === "admin";
   const teacherCheck = userDetail.Role.role_type === "teacher";

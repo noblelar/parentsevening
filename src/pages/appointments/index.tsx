@@ -14,14 +14,15 @@ import AppointmentTable from "./appointments_table";
 import { GetTime } from "@/utils/auxiliary";
 
 const Appointments: React.FC = (props: any) => {
-  const { isLoading, globalEvening, globalEveningTeachers } =
+  const { isLoading, globalEvening, globalEveningTeachers, globalTeachers } =
     useGlobalContext();
   const evenings: Evening[] = props.evenings;
   const appointments = props.appointments;
   const [eveningDetails, setEveningDetails] = useState<Evening>();
   const [slotkey, setSlotkey] = useState<TimeSlot[]>([]);
 
-  console.log(props.user)
+  const [myId, setMyId] = useState<number>(props.user?.user_id)
+
 
   useEffect(() => {
     const fetchEveningData = async () => {
@@ -62,7 +63,6 @@ const Appointments: React.FC = (props: any) => {
     }
   }, [globalEvening, globalEveningTeachers]);
 
-  console.log(props);
   useEffect(() => {
     const getSlotKeys = async () => {
       // globalEveningTeachers.length > 0
@@ -103,12 +103,11 @@ const Appointments: React.FC = (props: any) => {
     getSlotKeys();
   }, [globalEvening, globalEveningTeachers]);
 
-  // console.log(slotkey);
 
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
-        <DashboardNav evening_data={evenings} />
+        <DashboardNav evening_data={evenings} teach_data={globalTeachers} myId={myId} />
 
         {globalEvening == "all" ? (
           <AppointmentTable appointments={appointments} />
@@ -192,7 +191,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     );
 
     const appointment_Response = await fetch(
-      process.env.BACKEND_URL + "/appointments",
+      process.env.BACKEND_URL + `/appointments`,
       {
         method: "GET",
         headers: {

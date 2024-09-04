@@ -14,19 +14,19 @@ import Modal from "../modals/modal";
 import CreateEvening from "../modals/forms/create_evening";
 import { useGlobalContext } from "@/context/GlobalContext";
 import { Evening, Teacher } from "@/utils/data_interface";
-import { GetDate } from "@/utils/auxiliary";
+import { GetDate, GetEveningStatus } from "@/utils/auxiliary";
 import AddTeacherMenu from "../modals/forms/add_teachermenu";
 import MultiSelectTeacher from "../modals/forms/select_teacher";
 import LargeModal from "../modals/large_modal";
 import GenerateSlots from "../modals/forms/generate_slots";
 import Booking from "../modals/forms/booking";
+import CreateStudent from "../modals/forms/add_student";
+import StudentCheck from "../modals/forms/student_check";
 
-
-const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
+const DashboardNav = ({evening_data, myId, teach_data}:{evening_data: any,  myId: number, teach_data: Teacher[]}) => {
   const cur_route = useRouter();
 
-  console.log()
-  const eve_data: Evening[] = evening_data.evening_data;
+  const eve_data: Evening[] = evening_data;
 
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,11 +40,12 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
     globalEveningTeachers,
     globalValue,
     setGlobalTeachers,
-    userType
+    userType,
   } = useGlobalContext();
+  const [showTimes, setShowTimes] = useState(false);
+  const [studentId, setStudentId] = useState<null | number>(null);
+  const [eveningStatus, setEveningStatus] = useState<string | null>("")
 
-
-  console.log(globalValue)
   // Ensure the component only renders after it's mounted on the client
   useEffect(() => {
     setIsMounted(true); // Component has mounted
@@ -59,7 +60,6 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
 
   useEffect(() => {
     setGlobalTeachers(teach_data);
-    // console.log(teach_data)
   }, [globalEvening]);
 
   const openModal = (form: string, title: string) => {
@@ -99,18 +99,18 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
             },
           }
         );
-  
+
         const evenings = await evening_Response.json();
-  
+
         if (evening_Response.ok) {
           setGlobalEveningTeachers(evenings.teacher_eveing);
         }
       } catch (err) {
         console.error("Error fetching teachers", err);
       }
-    }
-    TeacherEveingRefill()
-  }, [globalEvening])
+    };
+    TeacherEveingRefill();
+  }, [globalEvening]);
 
   const handleOnChange = async (event: any) => {
     const selectedEvening = event.target.value;
@@ -129,6 +129,8 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
 
       const evenings = await evening_Response.json();
 
+      console.log({ evenings });
+
       if (evening_Response.ok) {
         setGlobalEveningTeachers(evenings.teacher_eveing);
       }
@@ -137,14 +139,25 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
     }
   };
 
+  useEffect(()=> {
+    const this_eve = eve_data.find((e: Evening) => e.evening_id == globalEvening )
+
+    if(this_eve){
+      const status = GetEveningStatus(this_eve.status)
+      setEveningStatus(status!)
+    }
+
+  }, [globalEvening, eve_data])
+
+
   if (!isMounted) {
     return null; // Don't render the component on the server
   }
-  console.log(globalEvening);
+  
   return (
     <div className=" w-full bg-primary_dark sticky top-[0px] z-20 ">
       <div className=" container m-auto flex justify-between p-2 space-x-2 ">
-        <div>
+        <div className="flex justify-center items-center ">
           {/* Navigation Dropdown (left-aligned) */}
           <select
             className="text-white bg-transparent border border-white p-2 rounded"
@@ -173,12 +186,15 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
               </option>
             ))}
           </select>
+          <p className=" text-white/55 italic font-abel px-4 underline ">
+            { userType == "parent"? null : eveningStatus}
+          </p>
         </div>
         <p className=" text-white ">{globalEvening ? globalEvening : null}</p>
 
         <div className="flex space-x-4 items-center">
           {/* Dashboard Navigations */}
-          {cur_route.asPath == "/dashboard" ? (
+          {cur_route.asPath == "/dashboard" && userType == "admin" ? (
             <StartIcon
               onClick={() => openModal("evening_form", "Create New Evening")}
               tooltip={"Start New Evening"}
@@ -186,20 +202,20 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
           ) : null}
 
           {/* Appointments Navigations */}
-          {cur_route.asPath == "/appointments" && userType == 'admin' ? (
+          {cur_route.asPath == "/appointments" && userType == "admin" ? (
             <GenerateIcon
               onClick={() => LopenModal("generate_slots", "Booking Slots")}
               tooltip={"Generate Teacher Slots"}
             />
           ) : null}
-          {cur_route.asPath == "/appointments" && userType == 'parent' ? (
+          {cur_route.asPath == "/appointments" && userType == "parent" ? (
             <BookingIcon
               onClick={() => LopenModal("generate_booking", "Booking")}
               tooltip={" Book an Appointment "}
             />
           ) : null}
           {/* Teachers Navigations */}
-          {cur_route.asPath == "/teachers" ? (
+          {cur_route.asPath == "/teachers" && userType == "admin" ? (
             <PlusIcon
               onClick={() =>
                 openModal("add_teacher", "Add Teachers to Evening")
@@ -208,7 +224,7 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
             />
           ) : null}
 
-          {cur_route.asPath == "/teachers" ? (
+          {cur_route.asPath == "/teachers" && userType == "admin" ? (
             <UserAddIcon
               onClick={() => openModal("teacher_form", "Add New Teacher")}
               tooltip={"Add New Teacher"}
@@ -218,12 +234,12 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
           {/* Students Navigations */}
           {cur_route.asPath == "/students" ? (
             <UserAddIcon
-              onClick={() => openModal("student_form", "Add New Evening")}
+              onClick={() => openModal("student_form", "Add Student")}
               tooltip={"Add New Student"}
             />
           ) : null}
           {/* Parents Navigations */}
-          {cur_route.asPath == "/parents" ? (
+          {cur_route.asPath == "/parents" && userType == "admin" ? (
             <UserAddIcon
               onClick={() => openModal("parent_form", "Add New Parent")}
               tooltip={"Add New Parent"}
@@ -231,7 +247,7 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
           ) : null}
 
           {/* Evenings Navigations */}
-          {cur_route.asPath == "/evenings" ? (
+          {cur_route.asPath == "/evenings" && userType == "admin" ? (
             <PlusIcon
               onClick={() => openModal("evening_form", "Create New Evening")}
               tooltip={"Create New Evening"}
@@ -258,6 +274,9 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
           {formType === "add_teacher" && (
             <MultiSelectTeacher onClose={closeModal} />
           )}
+          {formType === "student_form" && (
+            <CreateStudent onClose={closeModal} />
+          )}
         </div>
       </Modal>
 
@@ -266,11 +285,19 @@ const DashboardNav = (evening_data: any, teach_data: Teacher[] ) => {
           {formType === "generate_slots" && (
             <GenerateSlots LonClose={LcloseModal} />
           )}
-          {formType === "generate_booking" && (
-            <Booking LonClose={LcloseModal} />
-          )}
+          {formType == "generate_booking" &&
+            (!showTimes ? (
+              <StudentCheck
+                LonClose={LcloseModal}
+                setShowTime={setShowTimes}
+                setStudentId={setStudentId}
+                myId={myId}
+              />
+            ) : (
+               <Booking LonClose={LcloseModal} studentId={studentId as number} myId={myId} />
+              // <p>Hello</p>
+            ))}
         </div>
-        
       </LargeModal>
     </div>
   );
