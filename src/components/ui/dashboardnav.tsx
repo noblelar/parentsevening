@@ -245,7 +245,7 @@ const DashboardNav = ({
             {userType == "parent" ? null : eveningStatus}
           </p>
         </div>
-        <p className=" text-white ">{globalEvening ? globalEvening : null}</p>
+        {/* <p className=" text-white ">{globalEvening ? globalEvening : null}</p> */}
 
         <div className="flex space-x-4 items-center">
           {/* Dashboard Navigations */}
