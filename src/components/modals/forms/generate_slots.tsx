@@ -90,6 +90,8 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
       const teacher_list = getStaffIds(globalEveningTeachers);
       const evening_id = globalEvening;
 
+      // console.log({eveningDetails})
+
       const genData = {
         start_time,
         end_time,
@@ -124,9 +126,9 @@ const GenerateSlots: React.FC<Menuprops> = ({ LonClose }) => {
     }
   };
 
-useEffect(()=>{
-  console.log({slotList})
-},[slotList])
+// useEffect(()=>{
+//   console.log({slotList})
+// },[slotList])
   // Function to save generated appointments (slots) to the database
   const handleSaveAppointments = async (event: any) => {
     event.preventDefault();
@@ -172,7 +174,7 @@ useEffect(()=>{
   }
 
   if (slotList.length > 0) {
-    console.log(slotList.length)
+    // console.log(slotList.length)
     return (
       <div className=" p-6 bg-white rounded-lg shadow-lg min-[50vh] max-h-[80vh] flex flex-col justify-between ">
         <div className=" overflow-y-scroll  scrollbar scrollbar-thumb-blue-500 scrollbar-track-gray-200 items-center justify-center justify-items-center min-w-full min-h-full  ">

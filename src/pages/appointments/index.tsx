@@ -23,6 +23,8 @@ const Appointments: React.FC = (props: any) => {
 
   const [myId, setMyId] = useState<number>(props.user?.user_id);
 
+  // console.log(appointments)
+  const apptA = appointments.filter((appt:any) => appt.evening_id == globalEvening )
   useEffect(() => {
     const fetchEveningData = async () => {
       if (globalEvening && globalEvening !== "all") {
@@ -109,7 +111,7 @@ const Appointments: React.FC = (props: any) => {
           evening_data={evenings}
           teach_data={globalTeachers}
           myId={myId}
-          eve_appointments={appointments}
+          eve_appointments={apptA}
         />
 
         {globalEvening == "all" ? (
@@ -118,7 +120,7 @@ const Appointments: React.FC = (props: any) => {
           <AppointmentDashboard
             timeslots={slotkey}
             eve_teachers={globalEveningTeachers}
-            eve_appointments={appointments}
+            eve_appointments={apptA}
           />
         )}
       </div>

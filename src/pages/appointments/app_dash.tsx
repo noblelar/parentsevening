@@ -31,7 +31,7 @@ const AppointmentDashboard: React.FC<{
   const slots: TimeSlot[] = timeslots.length > 0 ? timeslots : defaultTimeSlots;
 
   const { userType, globalEvening } = useGlobalContext();
-  const [theAppointments, setTheAppointment] = useState(eve_appointments);
+  // const [theAppointments, setTheAppointment] = useState(eve_appointments);
 
   useEffect(() => {
     const appointments = async () => {
@@ -49,7 +49,7 @@ const AppointmentDashboard: React.FC<{
           );
           const data = await response.json();
 
-          setTheAppointment(data.appointment);
+          // setTheAppointment(data.appointment);
         } catch (err) {
           console.log(err);
         }
@@ -59,6 +59,7 @@ const AppointmentDashboard: React.FC<{
     appointments();
   }, [globalEvening]);
 
+  // console.log({theAppointments, eve_teachers})
   return (
     <div className="grid grid-flow-col gap-4 overflow-scroll">
       {/* Time slots on the left */}
@@ -81,8 +82,10 @@ const AppointmentDashboard: React.FC<{
         <TeachersBlock
           key={teacher.staff_id}
           teacher={teacher}
-          appointments={theAppointments.filter(
-            (appointment) => appointment.teacher_id === teacher.staff_id
+          appointments={eve_appointments.filter(
+            (appointment) => {
+              return appointment.teacher_id == teacher.staff_id
+            }
           )}
           // timeslots={slots}
         />

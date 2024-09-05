@@ -10,6 +10,7 @@ const TeachersBlock = ({
   teacher: Teacher;
   appointments: Appointment[];
 }) => {
+  // console.log({appointments})
   return (
     <div className=" m-4 w-[150px] ">
       <div className=" text-center font-abel font-bold ">

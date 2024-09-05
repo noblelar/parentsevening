@@ -151,7 +151,7 @@ const DashboardNav = ({
 
       const evenings = await evening_Response.json();
 
-      console.log({ evenings });
+      // console.log({ evenings });
 
       if (evening_Response.ok) {
         setGlobalEveningTeachers(evenings.teacher_eveing);

@@ -24,7 +24,7 @@ const MultiSelectTeacher: React.FC<MultiSelectTeacherProps> = ({ onClose }) => {
 
   useEffect(() => {
     setTeacher(globalTeachers);
-  }, [globalTeachers]);
+  }, [globalTeachers, setGlobalEveningTeachers]);
 
   // Function to add a teacher to the selected list
   const handleSelectTeacher = (teacher: Teacher) => {
@@ -67,6 +67,8 @@ const MultiSelectTeacher: React.FC<MultiSelectTeacherProps> = ({ onClose }) => {
         setSubmitSuccess(true);
         // After successful submission, fetch updated teacher list
         fetchUpdatedTeachers();
+        location.reload();
+
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -85,7 +87,7 @@ const MultiSelectTeacher: React.FC<MultiSelectTeacherProps> = ({ onClose }) => {
       const updatedTeachers = await response.json();
       if (response.ok) {
         // Update global state with the new teacher list
-        setGlobalEveningTeachers(updatedTeachers.teacher_eveing);
+        setGlobalEveningTeachers(updatedTeachers.teacher_eveing)
       }
     } catch (error) {
       console.error("Error fetching updated teachers:", error);
