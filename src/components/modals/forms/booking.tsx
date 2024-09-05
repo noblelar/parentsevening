@@ -9,6 +9,7 @@ import {
   Teacher,
   TimeSlot,
 } from "@/utils/data_interface";
+import { appointments } from "@/utils/datasamples";
 import React, { useEffect, useState } from "react";
 
 interface Menuprops {
@@ -43,10 +44,9 @@ const Booking: React.FC<Menuprops> = ({ LonClose, studentId, myId }) => {
   const [appt, setAppt] = useState<ApptTeach[]>([]);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-
-  useEffect(() => {
-    console.log({ appt });
-  }, [appt]);
+  // useEffect(() => {
+  // }, [appt]);
+  console.log({ appt });
 
   useEffect(() => {
     const fetchEveningData = async () => {
@@ -158,9 +158,55 @@ const Booking: React.FC<Menuprops> = ({ LonClose, studentId, myId }) => {
     getSlotList();
   }, [globalEvening, globalEveningTeachers]);
 
-  useEffect(()=>{
-    console.log(selectedOption)
-  }, [selectedOption, setSelectedOption])
+  useEffect(() => {
+    console.log(selectedOption);
+  }, [selectedOption, setSelectedOption]);
+
+  const handleGenerateBooking = async (event: any) => {
+    event.preventDefault();
+
+    const int_val =
+      (new Date(slotList[0].ending_time!) as any) -
+      (new Date(slotList[0].starting_time!) as any);
+
+    console.log(int_val / 60000);
+    const GenData = {
+      interval: int_val / 60000,
+      slots: slotList,
+      prefered_time: selectedOption,
+    };
+
+    try {
+      const response = await fetch(`/api/generates/book_slots`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(GenData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Appointments generated successfully:", result);
+        const gen_appt: ApptTeach[] = result.schedule.map((an_appt: Appointment) => ({
+          appoitment_id: an_appt.appointment_id,
+          teacher_id: an_appt.teacher_id,
+          start_time: an_appt.starting_time,
+        }));
+        console.log(gen_appt)
+        setAppt(gen_appt)
+
+        // appt.map((appta) => verifySelected(appta.appoitment_id))
+        // setSaveSuccess(true); // Set success state
+      } else {
+        console.error("Failed to generate appointments");
+        // setSaveSuccess(false); // Set failure state
+      }
+    } catch (error) {
+      console.error("Error generating appointments:", error);
+      // setSaveSuccess(false); // Set failure state
+    }
+  };
 
   // const handleGenerateSlots = async (event: any) => {
   //   event.preventDefault();
@@ -283,16 +329,13 @@ const Booking: React.FC<Menuprops> = ({ LonClose, studentId, myId }) => {
     }
   };
 
-  console.log(globalEveningTeachers)
+  // console.log(globalEveningTeachers);
 
   const verifySelected = (appt_id: number): boolean => {
     const exist = appt.findIndex((a) => a.appoitment_id == appt_id);
-
+    console.log({exist, appt_id, appt})
     return exist > -1 ? true : false;
   };
-
-
-
 
   return (
     <div className=" p-6 bg-white rounded-lg shadow-lg min-[50vh] max-h-[80vh] flex flex-col justify-between ">
@@ -308,19 +351,21 @@ const Booking: React.FC<Menuprops> = ({ LonClose, studentId, myId }) => {
       {/* Action buttons */}
       <div className="flex items-center flex-row-reverse justify-between">
         <div className=" flex space-x-4">
-         
           <div>
-
-          <SlidingSelect starting_times={slotkey} setSelected={setSelectedOption} />
+            <SlidingSelect
+              starting_times={slotkey}
+              setSelected={setSelectedOption}
+            />
           </div>
-          {selectedOption? 
-           <button
-           type="button"
-           onClick={(e) => handleSaveAppointments(e)}
-           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-         >
-           Generate optimal Schdule
-         </button>: null}
+          {selectedOption ? (
+            <button
+              type="button"
+              onClick={(e) => handleGenerateBooking(e)}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Generate optimal Schdule
+            </button>
+          ) : null}
           {appt.length == globalEveningTeachers.length ? (
             <button
               type="button"

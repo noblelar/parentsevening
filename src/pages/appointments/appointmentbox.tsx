@@ -37,6 +37,7 @@ const AppointmentBox: React.FC<AppointmentBoxProps> = ({ appointmenta }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* <p>H</p> */}
       {appointment.parent_id && appointment.student_id ? (
         <FaCheck className="text-green-500" />
       ) : (

@@ -21,8 +21,7 @@ const Appointments: React.FC = (props: any) => {
   const [eveningDetails, setEveningDetails] = useState<Evening>();
   const [slotkey, setSlotkey] = useState<TimeSlot[]>([]);
 
-  const [myId, setMyId] = useState<number>(props.user?.user_id)
-
+  const [myId, setMyId] = useState<number>(props.user?.user_id);
 
   useEffect(() => {
     const fetchEveningData = async () => {
@@ -103,11 +102,15 @@ const Appointments: React.FC = (props: any) => {
     getSlotKeys();
   }, [globalEvening, globalEveningTeachers]);
 
-
   return (
     <Layout user_data={props}>
       <div className=" h-[calc(100vh-77.797px)] w-[100%] overflow-y-scroll space-y-8">
-        <DashboardNav evening_data={evenings} teach_data={globalTeachers} myId={myId} />
+        <DashboardNav
+          evening_data={evenings}
+          teach_data={globalTeachers}
+          myId={myId}
+          eve_appointments={appointments}
+        />
 
         {globalEvening == "all" ? (
           <AppointmentTable appointments={appointments} />
@@ -136,16 +139,18 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         const userData = JSON.parse(
           JSON.stringify(verifyJWT(cookies.access_token))
         );
-        // console.log(userData);
+        console.log(userData);
 
         const user_id = userData.user_info.user_id;
         return user_id;
       }
     }
   }
+  let user_id;
 
-  const user_id = getUserId();
-  if (!user_id) {
+  try {
+    user_id = getUserId();
+  } catch (error) {
     return {
       redirect: {
         destination: "/login",

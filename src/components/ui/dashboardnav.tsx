@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import Modal from "../modals/modal";
 import CreateEvening from "../modals/forms/create_evening";
 import { useGlobalContext } from "@/context/GlobalContext";
-import { Evening, Teacher } from "@/utils/data_interface";
+import { Appointment, Evening, Teacher } from "@/utils/data_interface";
 import { GetDate, GetEveningStatus } from "@/utils/auxiliary";
 import AddTeacherMenu from "../modals/forms/add_teachermenu";
 import MultiSelectTeacher from "../modals/forms/select_teacher";
@@ -23,7 +23,17 @@ import Booking from "../modals/forms/booking";
 import CreateStudent from "../modals/forms/add_student";
 import StudentCheck from "../modals/forms/student_check";
 
-const DashboardNav = ({evening_data, myId, teach_data}:{evening_data: any,  myId: number, teach_data: Teacher[]}) => {
+const DashboardNav = ({
+  evening_data,
+  myId,
+  teach_data,
+  eve_appointments,
+}: {
+  evening_data: any;
+  myId: number;
+  teach_data: Teacher[];
+  eve_appointments: Appointment[];
+}) => {
   const cur_route = useRouter();
 
   const eve_data: Evening[] = evening_data;
@@ -44,7 +54,7 @@ const DashboardNav = ({evening_data, myId, teach_data}:{evening_data: any,  myId
   } = useGlobalContext();
   const [showTimes, setShowTimes] = useState(false);
   const [studentId, setStudentId] = useState<null | number>(null);
-  const [eveningStatus, setEveningStatus] = useState<string | null>("")
+  const [eveningStatus, setEveningStatus] = useState<string | null>("");
 
   // Ensure the component only renders after it's mounted on the client
   useEffect(() => {
@@ -81,6 +91,18 @@ const DashboardNav = ({evening_data, myId, teach_data}:{evening_data: any,  myId
   const LcloseModal = () => {
     setLIsModalOpen(false);
   };
+
+  // console.log(eve_appointments)
+  let eve_check = false;
+  if (eve_appointments?.length > 0) {
+    eve_appointments.forEach((eve_ap) => {
+      if (eve_ap.evening_id == globalEvening) {
+        eve_check = true;
+        return;
+      }
+      // eve_check = false;
+    });
+  }
 
   const checkId = (id: any) => {
     const check = id == globalEvening ? true : false;
@@ -139,21 +161,54 @@ const DashboardNav = ({evening_data, myId, teach_data}:{evening_data: any,  myId
     }
   };
 
-  useEffect(()=> {
-    const this_eve = eve_data.find((e: Evening) => e.evening_id == globalEvening )
+  useEffect(() => {
+    const this_eve = eve_data.find(
+      (e: Evening) => e.evening_id == globalEvening
+    );
 
-    if(this_eve){
-      const status = GetEveningStatus(this_eve.status)
-      setEveningStatus(status!)
+    if (this_eve) {
+      const status = GetEveningStatus(this_eve.status);
+      setEveningStatus(status!);
     }
+  }, [globalEvening, eve_data]);
 
-  }, [globalEvening, eve_data])
+  const publishAppointment = async () => {
+    const publish = {
+      status: "B",
+    };
 
+    try {
+      const response = await fetch(
+        `/api/update/evening/route?eveningId=${globalEvening}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(publish),
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Appointments Published successfully:", result);
+        location.reload();
+
+        // setSaveSuccess(true); // Set success state
+      } else {
+        console.error("Failed to Publish appointments");
+        // setSaveSuccess(false); // Set failure state
+      }
+    } catch (error) {
+      console.error("Error Publishing appointments:", error);
+      // setSaveSuccess(false); // Set failure state
+    }
+  };
 
   if (!isMounted) {
     return null; // Don't render the component on the server
   }
-  
+
   return (
     <div className=" w-full bg-primary_dark sticky top-[0px] z-20 ">
       <div className=" container m-auto flex justify-between p-2 space-x-2 ">
@@ -187,7 +242,7 @@ const DashboardNav = ({evening_data, myId, teach_data}:{evening_data: any,  myId
             ))}
           </select>
           <p className=" text-white/55 italic font-abel px-4 underline ">
-            { userType == "parent"? null : eveningStatus}
+            {userType == "parent" ? null : eveningStatus}
           </p>
         </div>
         <p className=" text-white ">{globalEvening ? globalEvening : null}</p>
@@ -202,6 +257,18 @@ const DashboardNav = ({evening_data, myId, teach_data}:{evening_data: any,  myId
           ) : null}
 
           {/* Appointments Navigations */}
+          {cur_route.asPath == "/appointments" &&
+          userType == "admin" &&
+          eve_check &&
+          eveningStatus == "Started" ? (
+            <button
+              className=" text-primary_light font-bold w-[90px] p-2 rounded bg-white hover:text-white hover:bg-primary_light hover:border hover:border-white "
+              type="button"
+              onClick={publishAppointment}
+            >
+              Publish
+            </button>
+          ) : null}
           {cur_route.asPath == "/appointments" && userType == "admin" ? (
             <GenerateIcon
               onClick={() => LopenModal("generate_slots", "Booking Slots")}
@@ -294,7 +361,11 @@ const DashboardNav = ({evening_data, myId, teach_data}:{evening_data: any,  myId
                 myId={myId}
               />
             ) : (
-               <Booking LonClose={LcloseModal} studentId={studentId as number} myId={myId} />
+              <Booking
+                LonClose={LcloseModal}
+                studentId={studentId as number}
+                myId={myId}
+              />
               // <p>Hello</p>
             ))}
         </div>
